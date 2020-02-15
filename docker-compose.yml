@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  jupyternotebook:
+    #image: jupyter/base-notebook:latest
+    image: jupyter-geo:2020-01-29
+    #image: spark-jupyter:2020-01-29
+    #build: .
+    user: root
+    # URLに書いてある設定を読んで以下のenvironmentを書く。
+    environment:
+      #NB_UID: 1000
+      #NB_UID: 1002
+      NB_GID: 100
+      GRANT_SUDO: "yes"
+    # コンテナの/jobyan/work以下をホストの./workにおいてデータ永続化する。
+    volumes:
+       - "./.jupyter:/home/jovyan/.jupyter"
+       - "./work:/home/jovyan/work"
+       - "./notebook-ssl:/etc/ssl/notebook"
+       - "./spark-defaults.conf:/usr/local/spark/conf/spark-defaults.conf"
+       - "./bashrc:/home/jovyan/.bashrc"
+       - "./matplotlibrc:/opt/conda/lib/python3.7/site-packages/matplotlib/mpl-data/matplotlibrc"
+         #- "./spark-env.sh:/usr/local/spark/conf/spark-env.sh"
+    privileged: true
+    # (ホストポート:コンテナポート)
+    ports:
+      - "8888:8888"
+      - "8080:8080"
+      - "8000:8000"
+      - "7077:7077"
+      - "5000:5000"
+      - "4050:4040"
+      - "6006:6006"
+      - "6007:6007"
+    restart: unless-stopped
+    #command: start.sh jupyter notebook --NotebookApp.token='' 
+    #command: start.sh jupyter notebook --NotebookApp.token='091fd95a13da:02c1167581cfe313e9ecf490ab57082b501ea0dc'  --NotebookApp.keyfile=/etc/ssl/notebook/notebook.key    --NotebookApp.certfile=/etc/ssl/notebook/notebook.crt
+    command: start.sh jupyter lab --NotebookApp.password='sha1:b735ed4a0d00:75a18f79e312559cd0a266bac3974efb0382775a'  --NotebookApp.keyfile=/etc/ssl/notebook/notebook.key    --NotebookApp.certfile=/etc/ssl/notebook/notebook.crt
+
