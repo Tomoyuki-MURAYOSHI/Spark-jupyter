@@ -1,0 +1,15 @@
+[0m[[0m[0mdebug[0m] [0m[0mPackaging /home/jovyan/work/UDF_Java-Scala/test_2020-02-16/scala/target/scala-2.11/sparkudfs_2.11-0.1.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/jovyan/work/UDF_Java-Scala/test_2020-02-16/scala/target/scala-2.11/classes[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/jovyan/work/UDF_Java-Scala/test_2020-02-16/scala/target/scala-2.11/classes/com[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/example[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/jovyan/work/UDF_Java-Scala/test_2020-02-16/scala/target/scala-2.11/classes/com/example[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/example/spark[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/jovyan/work/UDF_Java-Scala/test_2020-02-16/scala/target/scala-2.11/classes/com/example/spark[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/example/spark/udfs[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/jovyan/work/UDF_Java-Scala/test_2020-02-16/scala/target/scala-2.11/classes/com/example/spark/udfs[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/example/spark/udfs/addOne.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/jovyan/work/UDF_Java-Scala/test_2020-02-16/scala/target/scala-2.11/classes/com/example/spark/udfs/addOne.class[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone packaging.[0m

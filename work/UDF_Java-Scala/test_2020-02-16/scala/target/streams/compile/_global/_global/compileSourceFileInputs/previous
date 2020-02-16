@@ -1,0 +1,1 @@
+["sbt.Task[scala.collection.immutable.Map[java.lang.String, scala.collection.Seq[scala.Tuple2[java.nio.file.Path, sbt.nio.FileStamp]]]]",{"2.11.12":{"hashes":[["/home/jovyan/work/UDF_Java-Scala/test_2020-02-16/scala/src/main/scala/scalaudf.scala","dc2df8762d86863adb91e440ff2860fa4e1ade87"]],"lastModifiedTimes":[]}}]
