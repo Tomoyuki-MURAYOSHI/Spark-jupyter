@@ -27,3 +27,5 @@
 - https://blog.chocolapod.net/momokan/entry/89
 - https://dk521123.hatenablog.com/entry/2020/01/02/000000
 - https://qiita.com/qtwi/items/59e135b0a4c46e37c876
+
+- https://www.ibm.com/support/knowledgecenter/en/SS3H8V_1.1.0/com.ibm.izoda.v1r1.azka100/topics/azkic_t_updconfigfiles.htm
