@@ -20,3 +20,10 @@
 - https://software.fujitsu.com/jp/manual/manualfiles/m160007/j2ul2025/02z200/j2025-c-03-00.html
 
 
+---
+### additional
+- https://www.ne.jp/asahi/hishidama/home/tech/apache/hive/install.html
+- https://www.task-notes.com/entry/20160217/1455678000
+- https://blog.chocolapod.net/momokan/entry/89
+- https://dk521123.hatenablog.com/entry/2020/01/02/000000
+- https://qiita.com/qtwi/items/59e135b0a4c46e37c876
