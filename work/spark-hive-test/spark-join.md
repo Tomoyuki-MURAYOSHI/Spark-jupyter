@@ -4,6 +4,7 @@
 
 ## Links:
 
+- https://medium.com/datakaresolutions/optimize-spark-sql-joins-c81b4e3ed7da
 - https://deepsense.ai/optimize-spark-with-distribute-by-and-cluster-by/
 - https://qiita.com/neppysan/items/aa4be9b9a07c3c54f2fb
 - https://www.slideshare.net/databricks/optimizing-apache-spark-sql-joins
