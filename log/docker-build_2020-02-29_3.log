@@ -1,0 +1,836 @@
+Step 1/17 : FROM jupyter/all-spark-notebook:63d0df23b673
+ ---> 8be37f28748b
+Step 2/17 : USER root
+ ---> Running in 8002b81deb70
+Removing intermediate container 8002b81deb70
+ ---> 74b5f5f04484
+Step 3/17 : RUN apt-get update &&     apt-get install -y --no-install-recommends     build-essential    curl    gnupg    swig    vim     graphviz
+ ---> Running in 3c4ee81dd012
+Get:1 http://security.ubuntu.com/ubuntu bionic-security InRelease [88.7 kB]
+Get:2 http://archive.ubuntu.com/ubuntu bionic InRelease [242 kB]
+Get:3 http://repos.mesosphere.com/ubuntu xenial InRelease [5,275 B]
+Get:4 http://repos.mesosphere.com/ubuntu xenial/main amd64 Packages [20.6 kB]
+Get:5 http://security.ubuntu.com/ubuntu bionic-security/universe amd64 Packages [824 kB]
+Get:6 http://archive.ubuntu.com/ubuntu bionic-updates InRelease [88.7 kB]
+Get:7 http://archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Get:8 http://archive.ubuntu.com/ubuntu bionic/restricted amd64 Packages [13.5 kB]
+Get:9 http://archive.ubuntu.com/ubuntu bionic/main amd64 Packages [1,344 kB]
+Get:10 http://security.ubuntu.com/ubuntu bionic-security/multiverse amd64 Packages [7,641 B]
+Get:11 http://security.ubuntu.com/ubuntu bionic-security/restricted amd64 Packages [31.0 kB]
+Get:12 http://security.ubuntu.com/ubuntu bionic-security/main amd64 Packages [836 kB]
+Get:13 http://archive.ubuntu.com/ubuntu bionic/universe amd64 Packages [11.3 MB]
+Get:14 http://archive.ubuntu.com/ubuntu bionic/multiverse amd64 Packages [186 kB]
+Get:15 http://archive.ubuntu.com/ubuntu bionic-updates/restricted amd64 Packages [44.7 kB]
+Get:16 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 Packages [1,128 kB]
+Get:17 http://archive.ubuntu.com/ubuntu bionic-updates/multiverse amd64 Packages [11.7 kB]
+Get:18 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 Packages [1,351 kB]
+Get:19 http://archive.ubuntu.com/ubuntu bionic-backports/main amd64 Packages [2,496 B]
+Get:20 http://archive.ubuntu.com/ubuntu bionic-backports/universe amd64 Packages [4,247 B]
+Fetched 17.6 MB in 8s (2,141 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+build-essential is already the newest version (12.4ubuntu1).
+The following packages were automatically installed and are no longer required:
+  libapr1 libaprutil1 libcurl3-nss libcurl4-nss-dev libevent-2.1-6
+  libevent-core-2.1-6 libevent-dev libevent-extra-2.1-6 libevent-openssl-2.1-6
+  libevent-pthreads-2.1-6 libserf-1-1 libssl1.0.0 libsvn1
+Use 'apt autoremove' to remove them.
+The following additional packages will be installed:
+  dirmngr gnupg-l10n gnupg-utils gpg gpg-agent gpg-wks-client gpg-wks-server
+  gpgconf gpgsm libann0 libassuan0 libcdt5 libcgraph6 libcurl4 libgts-0.7-5
+  libgvc6 libgvpr2 libksba8 liblab-gamut1 libmpdec2 libnpth0 libpathplan4
+  libpython3.6 libpython3.6-minimal libpython3.6-stdlib pinentry-curses
+  swig3.0 vim-common vim-runtime xxd
+Suggested packages:
+  dbus-user-session libpam-systemd pinentry-gnome3 tor parcimonie xloadimage
+  scdaemon gsfonts graphviz-doc pinentry-doc swig-doc swig-examples
+  swig3.0-examples swig3.0-doc ctags vim-doc vim-scripts
+Recommended packages:
+  libgts-bin
+The following packages will be REMOVED:
+  libcurl3 mesos
+The following NEW packages will be installed:
+  curl dirmngr gnupg gnupg-l10n gnupg-utils gpg gpg-agent gpg-wks-client
+  gpg-wks-server gpgconf gpgsm graphviz libann0 libassuan0 libcdt5 libcgraph6
+  libcurl4 libgts-0.7-5 libgvc6 libgvpr2 libksba8 liblab-gamut1 libmpdec2
+  libnpth0 libpathplan4 libpython3.6 libpython3.6-minimal libpython3.6-stdlib
+  pinentry-curses swig swig3.0 vim vim-common vim-runtime xxd
+0 upgraded, 35 newly installed, 2 to remove and 19 not upgraded.
+Need to get 15.8 MB of archives.
+After this operation, 104 MB disk space will be freed.
+Get:1 http://archive.ubuntu.com/ubuntu bionic/main amd64 libmpdec2 amd64 2.4.2-1ubuntu1 [84.1 kB]
+Get:2 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libpython3.6-minimal amd64 3.6.9-1~18.04 [533 kB]
+Get:3 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libpython3.6-stdlib amd64 3.6.9-1~18.04 [1,709 kB]
+Get:4 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 xxd amd64 2:8.0.1453-1ubuntu1.1 [49.2 kB]
+Get:5 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 vim-common all 2:8.0.1453-1ubuntu1.1 [70.4 kB]
+Get:6 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libcurl4 amd64 7.58.0-2ubuntu3.8 [214 kB]
+Get:7 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 curl amd64 7.58.0-2ubuntu3.8 [159 kB]
+Get:8 http://archive.ubuntu.com/ubuntu bionic/main amd64 libassuan0 amd64 2.5.1-2 [35.0 kB]
+Get:9 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gpgconf amd64 2.2.4-1ubuntu1.2 [123 kB]
+Get:10 http://archive.ubuntu.com/ubuntu bionic/main amd64 libksba8 amd64 1.3.5-2 [92.6 kB]
+Get:11 http://archive.ubuntu.com/ubuntu bionic/main amd64 libnpth0 amd64 1.5-3 [7,668 B]
+Get:12 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 dirmngr amd64 2.2.4-1ubuntu1.2 [316 kB]
+Get:13 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gnupg-l10n all 2.2.4-1ubuntu1.2 [49.6 kB]
+Get:14 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gnupg-utils amd64 2.2.4-1ubuntu1.2 [127 kB]
+Get:15 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gpg amd64 2.2.4-1ubuntu1.2 [467 kB]
+Get:16 http://archive.ubuntu.com/ubuntu bionic/main amd64 pinentry-curses amd64 1.1.0-1 [35.8 kB]
+Get:17 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gpg-agent amd64 2.2.4-1ubuntu1.2 [227 kB]
+Get:18 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gpg-wks-client amd64 2.2.4-1ubuntu1.2 [91.9 kB]
+Get:19 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gpg-wks-server amd64 2.2.4-1ubuntu1.2 [84.9 kB]
+Get:20 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gpgsm amd64 2.2.4-1ubuntu1.2 [215 kB]
+Get:21 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 gnupg amd64 2.2.4-1ubuntu1.2 [249 kB]
+Get:22 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libann0 amd64 1.1.2+doc-6 [24.8 kB]
+Get:23 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libcdt5 amd64 2.40.1-2 [19.6 kB]
+Get:24 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libcgraph6 amd64 2.40.1-2 [40.8 kB]
+Get:25 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libgts-0.7-5 amd64 0.7.6+darcs121130-4 [150 kB]
+Get:26 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libpathplan4 amd64 2.40.1-2 [22.6 kB]
+Get:27 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libgvc6 amd64 2.40.1-2 [601 kB]
+Get:28 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libgvpr2 amd64 2.40.1-2 [169 kB]
+Get:29 http://archive.ubuntu.com/ubuntu bionic/universe amd64 liblab-gamut1 amd64 2.40.1-2 [178 kB]
+Get:30 http://archive.ubuntu.com/ubuntu bionic/universe amd64 graphviz amd64 2.40.1-2 [601 kB]
+Get:31 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 libpython3.6 amd64 3.6.9-1~18.04 [1,414 kB]
+Get:32 http://archive.ubuntu.com/ubuntu bionic/universe amd64 swig3.0 amd64 3.0.12-1 [1,094 kB]
+Get:33 http://archive.ubuntu.com/ubuntu bionic/universe amd64 swig amd64 3.0.12-1 [6,460 B]
+Get:34 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 vim-runtime all 2:8.0.1453-1ubuntu1.1 [5,435 kB]
+Get:35 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 vim amd64 2:8.0.1453-1ubuntu1.1 [1,152 kB]
+[91mdebconf: delaying package configuration, since apt-utils is not installed
+[0mFetched 15.8 MB in 7s (2,154 kB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 122193 files and directories currently installed.)
+Removing mesos (1.2.3-2.0.1) ...
+Removing libcurl3:amd64 (7.58.0-2ubuntu2) ...
+Selecting previously unselected package libmpdec2:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 119629 files and directories currently installed.)
+Preparing to unpack .../00-libmpdec2_2.4.2-1ubuntu1_amd64.deb ...
+Unpacking libmpdec2:amd64 (2.4.2-1ubuntu1) ...
+Selecting previously unselected package libpython3.6-minimal:amd64.
+Preparing to unpack .../01-libpython3.6-minimal_3.6.9-1~18.04_amd64.deb ...
+Unpacking libpython3.6-minimal:amd64 (3.6.9-1~18.04) ...
+Selecting previously unselected package libpython3.6-stdlib:amd64.
+Preparing to unpack .../02-libpython3.6-stdlib_3.6.9-1~18.04_amd64.deb ...
+Unpacking libpython3.6-stdlib:amd64 (3.6.9-1~18.04) ...
+Selecting previously unselected package xxd.
+Preparing to unpack .../03-xxd_2%3a8.0.1453-1ubuntu1.1_amd64.deb ...
+Unpacking xxd (2:8.0.1453-1ubuntu1.1) ...
+Selecting previously unselected package vim-common.
+Preparing to unpack .../04-vim-common_2%3a8.0.1453-1ubuntu1.1_all.deb ...
+Unpacking vim-common (2:8.0.1453-1ubuntu1.1) ...
+Selecting previously unselected package libcurl4:amd64.
+Preparing to unpack .../05-libcurl4_7.58.0-2ubuntu3.8_amd64.deb ...
+Unpacking libcurl4:amd64 (7.58.0-2ubuntu3.8) ...
+Selecting previously unselected package curl.
+Preparing to unpack .../06-curl_7.58.0-2ubuntu3.8_amd64.deb ...
+Unpacking curl (7.58.0-2ubuntu3.8) ...
+Selecting previously unselected package libassuan0:amd64.
+Preparing to unpack .../07-libassuan0_2.5.1-2_amd64.deb ...
+Unpacking libassuan0:amd64 (2.5.1-2) ...
+Selecting previously unselected package gpgconf.
+Preparing to unpack .../08-gpgconf_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking gpgconf (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package libksba8:amd64.
+Preparing to unpack .../09-libksba8_1.3.5-2_amd64.deb ...
+Unpacking libksba8:amd64 (1.3.5-2) ...
+Selecting previously unselected package libnpth0:amd64.
+Preparing to unpack .../10-libnpth0_1.5-3_amd64.deb ...
+Unpacking libnpth0:amd64 (1.5-3) ...
+Selecting previously unselected package dirmngr.
+Preparing to unpack .../11-dirmngr_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking dirmngr (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package gnupg-l10n.
+Preparing to unpack .../12-gnupg-l10n_2.2.4-1ubuntu1.2_all.deb ...
+Unpacking gnupg-l10n (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package gnupg-utils.
+Preparing to unpack .../13-gnupg-utils_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking gnupg-utils (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package gpg.
+Preparing to unpack .../14-gpg_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking gpg (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package pinentry-curses.
+Preparing to unpack .../15-pinentry-curses_1.1.0-1_amd64.deb ...
+Unpacking pinentry-curses (1.1.0-1) ...
+Selecting previously unselected package gpg-agent.
+Preparing to unpack .../16-gpg-agent_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking gpg-agent (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package gpg-wks-client.
+Preparing to unpack .../17-gpg-wks-client_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking gpg-wks-client (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package gpg-wks-server.
+Preparing to unpack .../18-gpg-wks-server_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking gpg-wks-server (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package gpgsm.
+Preparing to unpack .../19-gpgsm_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking gpgsm (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package gnupg.
+Preparing to unpack .../20-gnupg_2.2.4-1ubuntu1.2_amd64.deb ...
+Unpacking gnupg (2.2.4-1ubuntu1.2) ...
+Selecting previously unselected package libann0.
+Preparing to unpack .../21-libann0_1.1.2+doc-6_amd64.deb ...
+Unpacking libann0 (1.1.2+doc-6) ...
+Selecting previously unselected package libcdt5.
+Preparing to unpack .../22-libcdt5_2.40.1-2_amd64.deb ...
+Unpacking libcdt5 (2.40.1-2) ...
+Selecting previously unselected package libcgraph6.
+Preparing to unpack .../23-libcgraph6_2.40.1-2_amd64.deb ...
+Unpacking libcgraph6 (2.40.1-2) ...
+Selecting previously unselected package libgts-0.7-5:amd64.
+Preparing to unpack .../24-libgts-0.7-5_0.7.6+darcs121130-4_amd64.deb ...
+Unpacking libgts-0.7-5:amd64 (0.7.6+darcs121130-4) ...
+Selecting previously unselected package libpathplan4.
+Preparing to unpack .../25-libpathplan4_2.40.1-2_amd64.deb ...
+Unpacking libpathplan4 (2.40.1-2) ...
+Selecting previously unselected package libgvc6.
+Preparing to unpack .../26-libgvc6_2.40.1-2_amd64.deb ...
+Unpacking libgvc6 (2.40.1-2) ...
+Selecting previously unselected package libgvpr2.
+Preparing to unpack .../27-libgvpr2_2.40.1-2_amd64.deb ...
+Unpacking libgvpr2 (2.40.1-2) ...
+Selecting previously unselected package liblab-gamut1.
+Preparing to unpack .../28-liblab-gamut1_2.40.1-2_amd64.deb ...
+Unpacking liblab-gamut1 (2.40.1-2) ...
+Selecting previously unselected package graphviz.
+Preparing to unpack .../29-graphviz_2.40.1-2_amd64.deb ...
+Unpacking graphviz (2.40.1-2) ...
+Selecting previously unselected package libpython3.6:amd64.
+Preparing to unpack .../30-libpython3.6_3.6.9-1~18.04_amd64.deb ...
+Unpacking libpython3.6:amd64 (3.6.9-1~18.04) ...
+Selecting previously unselected package swig3.0.
+Preparing to unpack .../31-swig3.0_3.0.12-1_amd64.deb ...
+Unpacking swig3.0 (3.0.12-1) ...
+Selecting previously unselected package swig.
+Preparing to unpack .../32-swig_3.0.12-1_amd64.deb ...
+Unpacking swig (3.0.12-1) ...
+Selecting previously unselected package vim-runtime.
+Preparing to unpack .../33-vim-runtime_2%3a8.0.1453-1ubuntu1.1_all.deb ...
+Adding 'diversion of /usr/share/vim/vim80/doc/help.txt to /usr/share/vim/vim80/doc/help.txt.vim-tiny by vim-runtime'
+Adding 'diversion of /usr/share/vim/vim80/doc/tags to /usr/share/vim/vim80/doc/tags.vim-tiny by vim-runtime'
+Unpacking vim-runtime (2:8.0.1453-1ubuntu1.1) ...
+Selecting previously unselected package vim.
+Preparing to unpack .../34-vim_2%3a8.0.1453-1ubuntu1.1_amd64.deb ...
+Unpacking vim (2:8.0.1453-1ubuntu1.1) ...
+Setting up libnpth0:amd64 (1.5-3) ...
+Setting up libgts-0.7-5:amd64 (0.7.6+darcs121130-4) ...
+Setting up libpathplan4 (2.40.1-2) ...
+Setting up liblab-gamut1 (2.40.1-2) ...
+Setting up swig3.0 (3.0.12-1) ...
+Setting up xxd (2:8.0.1453-1ubuntu1.1) ...
+Setting up libcurl4:amd64 (7.58.0-2ubuntu3.8) ...
+Setting up libksba8:amd64 (1.3.5-2) ...
+Setting up gnupg-l10n (2.2.4-1ubuntu1.2) ...
+Setting up libpython3.6-minimal:amd64 (3.6.9-1~18.04) ...
+Setting up vim-common (2:8.0.1453-1ubuntu1.1) ...
+Setting up libann0 (1.1.2+doc-6) ...
+Setting up vim-runtime (2:8.0.1453-1ubuntu1.1) ...
+Setting up libassuan0:amd64 (2.5.1-2) ...
+Setting up libcdt5 (2.40.1-2) ...
+Setting up libmpdec2:amd64 (2.4.2-1ubuntu1) ...
+Setting up libcgraph6 (2.40.1-2) ...
+Setting up libpython3.6-stdlib:amd64 (3.6.9-1~18.04) ...
+Setting up swig (3.0.12-1) ...
+Setting up libgvc6 (2.40.1-2) ...
+Setting up curl (7.58.0-2ubuntu3.8) ...
+Setting up libgvpr2 (2.40.1-2) ...
+Setting up gpgconf (2.2.4-1ubuntu1.2) ...
+Setting up gpgsm (2.2.4-1ubuntu1.2) ...
+Setting up gnupg-utils (2.2.4-1ubuntu1.2) ...
+Setting up pinentry-curses (1.1.0-1) ...
+Setting up dirmngr (2.2.4-1ubuntu1.2) ...
+Setting up gpg (2.2.4-1ubuntu1.2) ...
+Setting up libpython3.6:amd64 (3.6.9-1~18.04) ...
+Setting up graphviz (2.40.1-2) ...
+Setting up vim (2:8.0.1453-1ubuntu1.1) ...
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vim (vim) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vimdiff (vimdiff) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/rvim (rvim) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/rview (rview) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vi (vi) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/fr/man1/vi.1.gz because associated file /usr/share/man/fr/man1/vim.1.gz (of link group vi) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/it/man1/vi.1.gz because associated file /usr/share/man/it/man1/vim.1.gz (of link group vi) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/pl/man1/vi.1.gz because associated file /usr/share/man/pl/man1/vim.1.gz (of link group vi) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/ru/man1/vi.1.gz because associated file /usr/share/man/ru/man1/vim.1.gz (of link group vi) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/ja/man1/vi.1.gz because associated file /usr/share/man/ja/man1/vim.1.gz (of link group vi) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/man1/vi.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group vi) doesn't exist
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/view (view) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/fr/man1/view.1.gz because associated file /usr/share/man/fr/man1/vim.1.gz (of link group view) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/it/man1/view.1.gz because associated file /usr/share/man/it/man1/vim.1.gz (of link group view) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/pl/man1/view.1.gz because associated file /usr/share/man/pl/man1/vim.1.gz (of link group view) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/ru/man1/view.1.gz because associated file /usr/share/man/ru/man1/vim.1.gz (of link group view) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/ja/man1/view.1.gz because associated file /usr/share/man/ja/man1/vim.1.gz (of link group view) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/man1/view.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group view) doesn't exist
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/ex (ex) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/fr/man1/ex.1.gz because associated file /usr/share/man/fr/man1/vim.1.gz (of link group ex) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/it/man1/ex.1.gz because associated file /usr/share/man/it/man1/vim.1.gz (of link group ex) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/pl/man1/ex.1.gz because associated file /usr/share/man/pl/man1/vim.1.gz (of link group ex) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/ru/man1/ex.1.gz because associated file /usr/share/man/ru/man1/vim.1.gz (of link group ex) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/ja/man1/ex.1.gz because associated file /usr/share/man/ja/man1/vim.1.gz (of link group ex) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/man1/ex.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group ex) doesn't exist
+Setting up gpg-agent (2.2.4-1ubuntu1.2) ...
+Setting up gpg-wks-server (2.2.4-1ubuntu1.2) ...
+Setting up gpg-wks-client (2.2.4-1ubuntu1.2) ...
+Setting up gnupg (2.2.4-1ubuntu1.2) ...
+Processing triggers for hicolor-icon-theme (0.17-2) ...
+Processing triggers for mime-support (3.60ubuntu1) ...
+Processing triggers for install-info (6.5.0.dfsg.1-2) ...
+Processing triggers for libc-bin (2.27-3ubuntu1) ...
+Removing intermediate container 3c4ee81dd012
+ ---> 420ed8b3808f
+Step 4/17 : RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list &&     curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add &&     apt-get update &&     apt-get install -y     scala    openjdk-8-jdk    maven    junit    junit4    sbt
+ ---> Running in 0ba6e1ea6e65
+deb https://dl.bintray.com/sbt/debian /
+[91mWarning: apt-key output should not be parsed (stdout is not a terminal)
+[0mOK
+Hit:1 http://repos.mesosphere.com/ubuntu xenial InRelease
+Hit:2 http://security.ubuntu.com/ubuntu bionic-security InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu bionic InRelease
+Ign:4 https://dl.bintray.com/sbt/debian  InRelease
+Hit:5 http://archive.ubuntu.com/ubuntu bionic-updates InRelease
+Get:6 https://dl.bintray.com/sbt/debian  Release [815 B]
+Get:7 https://dl.bintray.com/sbt/debian  Release.gpg [821 B]
+Hit:8 http://archive.ubuntu.com/ubuntu bionic-backports InRelease
+Get:9 https://dl.bintray.com/sbt/debian  Packages [4,235 B]
+Fetched 5,871 B in 2s (2,783 B/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following packages were automatically installed and are no longer required:
+  libapr1 libaprutil1 libcurl3-nss libcurl4-nss-dev libevent-2.1-6
+  libevent-core-2.1-6 libevent-dev libevent-extra-2.1-6 libevent-openssl-2.1-6
+  libevent-pthreads-2.1-6 libserf-1-1 libssl1.0.0 libsvn1
+Use 'apt autoremove' to remove them.
+The following additional packages will be installed:
+  libaopalliance-java libapache-pom-java libatinject-jsr330-api-java
+  libatk-wrapper-java libatk-wrapper-java-jni libcdi-api-java
+  libcommons-cli-java libcommons-io-java libcommons-lang3-java
+  libcommons-parent-java libfontenc1 libgeronimo-annotation-1.3-spec-java
+  libgeronimo-interceptor-3.0-spec-java libguava-java libguice-java
+  libhamcrest-java libhawtjni-runtime-java libice-dev libjansi-java
+  libjansi-native-java libjline2-java libjsr305-java libmaven-parent-java
+  libmaven-resolver-java libmaven-shared-utils-java libmaven3-core-java
+  libplexus-cipher-java libplexus-classworlds-java
+  libplexus-component-annotations-java libplexus-interpolation-java
+  libplexus-sec-dispatcher-java libplexus-utils2-java libsisu-inject-java
+  libsisu-plexus-java libslf4j-java libsm-dev libwagon-file-java
+  libwagon-http-shaded-java libwagon-provider-api-java libxmuu1 libxt-dev
+  libxxf86dga1 openjdk-8-jdk-headless openjdk-8-jre scala-library
+  scala-parser-combinators scala-xml x11-utils
+Suggested packages:
+  junit-doc libaopalliance-java-doc libatinject-jsr330-api-java-doc
+  libservlet3.1-java libcommons-io-java-doc libcommons-lang3-java-doc
+  libasm-java libcglib-java libice-doc libjsr305-java-doc
+  libmaven-shared-utils-java-doc liblogback-java libplexus-cipher-java-doc
+  libplexus-classworlds-java-doc libplexus-interpolation-java-doc
+  libplexus-sec-dispatcher-java-doc libplexus-utils2-java-doc testng
+  libcommons-logging-java liblog4j1.2-java libsm-doc libxt-doc openjdk-8-demo
+  openjdk-8-source visualvm icedtea-8-plugin scala-doc mesa-utils
+The following NEW packages will be installed:
+  junit junit4 libaopalliance-java libapache-pom-java
+  libatinject-jsr330-api-java libatk-wrapper-java libatk-wrapper-java-jni
+  libcdi-api-java libcommons-cli-java libcommons-io-java libcommons-lang3-java
+  libcommons-parent-java libfontenc1 libgeronimo-annotation-1.3-spec-java
+  libgeronimo-interceptor-3.0-spec-java libguava-java libguice-java
+  libhamcrest-java libhawtjni-runtime-java libice-dev libjansi-java
+  libjansi-native-java libjline2-java libjsr305-java libmaven-parent-java
+  libmaven-resolver-java libmaven-shared-utils-java libmaven3-core-java
+  libplexus-cipher-java libplexus-classworlds-java
+  libplexus-component-annotations-java libplexus-interpolation-java
+  libplexus-sec-dispatcher-java libplexus-utils2-java libsisu-inject-java
+  libsisu-plexus-java libslf4j-java libsm-dev libwagon-file-java
+  libwagon-http-shaded-java libwagon-provider-api-java libxmuu1 libxt-dev
+  libxxf86dga1 maven openjdk-8-jdk openjdk-8-jdk-headless openjdk-8-jre sbt
+  scala scala-library scala-parser-combinators scala-xml x11-utils
+0 upgraded, 54 newly installed, 0 to remove and 19 not upgraded.
+Need to get 46.6 MB of archives.
+After this operation, 87.1 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxxf86dga1 amd64 2:1.1.4-1 [13.7 kB]
+Get:2 https://dl.bintray.com/sbt/debian  sbt 1.3.8 [1,233 kB]
+Get:3 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxmuu1 amd64 2:1.1.2-2 [9,674 B]
+Get:4 http://archive.ubuntu.com/ubuntu bionic/universe amd64 junit all 3.8.2-9 [108 kB]
+Get:5 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libhamcrest-java all 1.3-7 [388 kB]
+Get:6 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 junit4 all 4.12-8~18.04 [293 kB]
+Get:7 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libapache-pom-java all 18-1 [4,720 B]
+Get:8 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libatinject-jsr330-api-java all 1.0+ds1-5 [5,348 B]
+Get:9 http://archive.ubuntu.com/ubuntu bionic/main amd64 libfontenc1 amd64 1:1.1.3-1 [13.9 kB]
+Get:10 http://archive.ubuntu.com/ubuntu bionic/main amd64 x11-utils amd64 7.7+3build1 [196 kB]
+Get:11 http://archive.ubuntu.com/ubuntu bionic/main amd64 libatk-wrapper-java all 0.33.3-20ubuntu0.1 [34.7 kB]
+Get:12 http://archive.ubuntu.com/ubuntu bionic/main amd64 libatk-wrapper-java-jni amd64 0.33.3-20ubuntu0.1 [28.3 kB]
+Get:13 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libgeronimo-interceptor-3.0-spec-java all 1.0.1-4fakesync [8,616 B]
+Get:14 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libcdi-api-java all 1.2-2 [54.5 kB]
+Get:15 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libcommons-cli-java all 1.4-1 [53.8 kB]
+Get:16 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libcommons-parent-java all 43-1 [10.8 kB]
+Get:17 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libcommons-io-java all 2.6-2 [198 kB]
+Get:18 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 libcommons-lang3-java all 3.8-1~18.04.2 [479 kB]
+Get:19 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libgeronimo-annotation-1.3-spec-java all 1.0-1 [10.7 kB]
+Get:20 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libjsr305-java all 0.1~+svn49-10 [26.5 kB]
+Get:21 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libguava-java all 19.0-1 [2,028 kB]
+Get:22 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libaopalliance-java all 20070526-6 [9,084 B]
+Get:23 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libguice-java all 4.0-4 [853 kB]
+Get:24 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libhawtjni-runtime-java all 1.15-2 [27.1 kB]
+Get:25 http://archive.ubuntu.com/ubuntu bionic/main amd64 libice-dev amd64 2:1.0.9-2 [46.8 kB]
+Get:26 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libjansi-native-java all 1.7-1 [19.4 kB]
+Get:27 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libjansi-java all 1.16-1 [36.2 kB]
+Get:28 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libjline2-java all 2.14.6-1 [150 kB]
+Get:29 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 libmaven-parent-java all 31-2~18.04 [5,196 B]
+Get:30 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libplexus-utils2-java all 3.0.24-3 [246 kB]
+Get:31 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libwagon-provider-api-java all 3.0.0-2 [48.2 kB]
+Get:32 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 libmaven-resolver-java all 1.3.1-1~18.04 [549 kB]
+Get:33 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 libmaven-shared-utils-java all 3.3.0-1~18.04 [149 kB]
+Get:34 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libplexus-cipher-java all 1.7-3 [15.1 kB]
+Get:35 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libplexus-classworlds-java all 2.5.2-2 [49.3 kB]
+Get:36 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libplexus-component-annotations-java all 1.7.1-7 [6,596 B]
+Get:37 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libplexus-interpolation-java all 1.24-1 [73.4 kB]
+Get:38 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libplexus-sec-dispatcher-java all 1.4-3 [28.0 kB]
+Get:39 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libslf4j-java all 1.7.25-3 [141 kB]
+Get:40 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libsisu-inject-java all 0.3.2-2 [346 kB]
+Get:41 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libsisu-plexus-java all 0.3.3-3 [182 kB]
+Get:42 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 libmaven3-core-java all 3.6.0-1~18.04.1 [1,465 kB]
+Get:43 http://archive.ubuntu.com/ubuntu bionic/main amd64 libsm-dev amd64 2:1.2.2-1 [16.2 kB]
+Get:44 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libwagon-file-java all 3.0.0-2 [7,960 B]
+Get:45 http://archive.ubuntu.com/ubuntu bionic/universe amd64 libwagon-http-shaded-java all 3.0.0-2 [1,757 kB]
+Get:46 http://archive.ubuntu.com/ubuntu bionic/main amd64 libxt-dev amd64 1:1.1.5-1 [395 kB]
+Get:47 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 maven all 3.6.0-1~18.04.1 [22.4 kB]
+Get:48 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 openjdk-8-jre amd64 8u242-b08-0ubuntu3~18.04 [69.7 kB]
+Get:49 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 openjdk-8-jdk-headless amd64 8u242-b08-0ubuntu3~18.04 [8,268 kB]
+Get:50 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 openjdk-8-jdk amd64 8u242-b08-0ubuntu3~18.04 [1,606 kB]
+Get:51 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 scala-library all 2.11.12-4~18.04 [9,589 kB]
+Get:52 http://archive.ubuntu.com/ubuntu bionic/universe amd64 scala-parser-combinators all 1.0.3-3 [355 kB]
+Get:53 http://archive.ubuntu.com/ubuntu bionic/universe amd64 scala-xml all 1.0.3-3 [601 kB]
+Get:54 http://archive.ubuntu.com/ubuntu bionic-updates/universe amd64 scala all 2.11.12-4~18.04 [14.2 MB]
+[91mdebconf: delaying package configuration, since apt-utils is not installed
+[0mFetched 46.6 MB in 14s (3,282 kB/s)
+Selecting previously unselected package libxxf86dga1:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 123211 files and directories currently installed.)
+Preparing to unpack .../00-libxxf86dga1_2%3a1.1.4-1_amd64.deb ...
+Unpacking libxxf86dga1:amd64 (2:1.1.4-1) ...
+Selecting previously unselected package libxmuu1:amd64.
+Preparing to unpack .../01-libxmuu1_2%3a1.1.2-2_amd64.deb ...
+Unpacking libxmuu1:amd64 (2:1.1.2-2) ...
+Selecting previously unselected package junit.
+Preparing to unpack .../02-junit_3.8.2-9_all.deb ...
+Unpacking junit (3.8.2-9) ...
+Selecting previously unselected package libhamcrest-java.
+Preparing to unpack .../03-libhamcrest-java_1.3-7_all.deb ...
+Unpacking libhamcrest-java (1.3-7) ...
+Selecting previously unselected package junit4.
+Preparing to unpack .../04-junit4_4.12-8~18.04_all.deb ...
+Unpacking junit4 (4.12-8~18.04) ...
+Selecting previously unselected package libapache-pom-java.
+Preparing to unpack .../05-libapache-pom-java_18-1_all.deb ...
+Unpacking libapache-pom-java (18-1) ...
+Selecting previously unselected package libatinject-jsr330-api-java.
+Preparing to unpack .../06-libatinject-jsr330-api-java_1.0+ds1-5_all.deb ...
+Unpacking libatinject-jsr330-api-java (1.0+ds1-5) ...
+Selecting previously unselected package libfontenc1:amd64.
+Preparing to unpack .../07-libfontenc1_1%3a1.1.3-1_amd64.deb ...
+Unpacking libfontenc1:amd64 (1:1.1.3-1) ...
+Selecting previously unselected package x11-utils.
+Preparing to unpack .../08-x11-utils_7.7+3build1_amd64.deb ...
+Unpacking x11-utils (7.7+3build1) ...
+Selecting previously unselected package libatk-wrapper-java.
+Preparing to unpack .../09-libatk-wrapper-java_0.33.3-20ubuntu0.1_all.deb ...
+Unpacking libatk-wrapper-java (0.33.3-20ubuntu0.1) ...
+Selecting previously unselected package libatk-wrapper-java-jni:amd64.
+Preparing to unpack .../10-libatk-wrapper-java-jni_0.33.3-20ubuntu0.1_amd64.deb ...
+Unpacking libatk-wrapper-java-jni:amd64 (0.33.3-20ubuntu0.1) ...
+Selecting previously unselected package libgeronimo-interceptor-3.0-spec-java.
+Preparing to unpack .../11-libgeronimo-interceptor-3.0-spec-java_1.0.1-4fakesync_all.deb ...
+Unpacking libgeronimo-interceptor-3.0-spec-java (1.0.1-4fakesync) ...
+Selecting previously unselected package libcdi-api-java.
+Preparing to unpack .../12-libcdi-api-java_1.2-2_all.deb ...
+Unpacking libcdi-api-java (1.2-2) ...
+Selecting previously unselected package libcommons-cli-java.
+Preparing to unpack .../13-libcommons-cli-java_1.4-1_all.deb ...
+Unpacking libcommons-cli-java (1.4-1) ...
+Selecting previously unselected package libcommons-parent-java.
+Preparing to unpack .../14-libcommons-parent-java_43-1_all.deb ...
+Unpacking libcommons-parent-java (43-1) ...
+Selecting previously unselected package libcommons-io-java.
+Preparing to unpack .../15-libcommons-io-java_2.6-2_all.deb ...
+Unpacking libcommons-io-java (2.6-2) ...
+Selecting previously unselected package libcommons-lang3-java.
+Preparing to unpack .../16-libcommons-lang3-java_3.8-1~18.04.2_all.deb ...
+Unpacking libcommons-lang3-java (3.8-1~18.04.2) ...
+Selecting previously unselected package libgeronimo-annotation-1.3-spec-java.
+Preparing to unpack .../17-libgeronimo-annotation-1.3-spec-java_1.0-1_all.deb ...
+Unpacking libgeronimo-annotation-1.3-spec-java (1.0-1) ...
+Selecting previously unselected package libjsr305-java.
+Preparing to unpack .../18-libjsr305-java_0.1~+svn49-10_all.deb ...
+Unpacking libjsr305-java (0.1~+svn49-10) ...
+Selecting previously unselected package libguava-java.
+Preparing to unpack .../19-libguava-java_19.0-1_all.deb ...
+Unpacking libguava-java (19.0-1) ...
+Selecting previously unselected package libaopalliance-java.
+Preparing to unpack .../20-libaopalliance-java_20070526-6_all.deb ...
+Unpacking libaopalliance-java (20070526-6) ...
+Selecting previously unselected package libguice-java.
+Preparing to unpack .../21-libguice-java_4.0-4_all.deb ...
+Unpacking libguice-java (4.0-4) ...
+Selecting previously unselected package libhawtjni-runtime-java.
+Preparing to unpack .../22-libhawtjni-runtime-java_1.15-2_all.deb ...
+Unpacking libhawtjni-runtime-java (1.15-2) ...
+Selecting previously unselected package libice-dev:amd64.
+Preparing to unpack .../23-libice-dev_2%3a1.0.9-2_amd64.deb ...
+Unpacking libice-dev:amd64 (2:1.0.9-2) ...
+Selecting previously unselected package libjansi-native-java.
+Preparing to unpack .../24-libjansi-native-java_1.7-1_all.deb ...
+Unpacking libjansi-native-java (1.7-1) ...
+Selecting previously unselected package libjansi-java.
+Preparing to unpack .../25-libjansi-java_1.16-1_all.deb ...
+Unpacking libjansi-java (1.16-1) ...
+Selecting previously unselected package libjline2-java.
+Preparing to unpack .../26-libjline2-java_2.14.6-1_all.deb ...
+Unpacking libjline2-java (2.14.6-1) ...
+Selecting previously unselected package libmaven-parent-java.
+Preparing to unpack .../27-libmaven-parent-java_31-2~18.04_all.deb ...
+Unpacking libmaven-parent-java (31-2~18.04) ...
+Selecting previously unselected package libplexus-utils2-java.
+Preparing to unpack .../28-libplexus-utils2-java_3.0.24-3_all.deb ...
+Unpacking libplexus-utils2-java (3.0.24-3) ...
+Selecting previously unselected package libwagon-provider-api-java.
+Preparing to unpack .../29-libwagon-provider-api-java_3.0.0-2_all.deb ...
+Unpacking libwagon-provider-api-java (3.0.0-2) ...
+Selecting previously unselected package libmaven-resolver-java.
+Preparing to unpack .../30-libmaven-resolver-java_1.3.1-1~18.04_all.deb ...
+Unpacking libmaven-resolver-java (1.3.1-1~18.04) ...
+Selecting previously unselected package libmaven-shared-utils-java.
+Preparing to unpack .../31-libmaven-shared-utils-java_3.3.0-1~18.04_all.deb ...
+Unpacking libmaven-shared-utils-java (3.3.0-1~18.04) ...
+Selecting previously unselected package libplexus-cipher-java.
+Preparing to unpack .../32-libplexus-cipher-java_1.7-3_all.deb ...
+Unpacking libplexus-cipher-java (1.7-3) ...
+Selecting previously unselected package libplexus-classworlds-java.
+Preparing to unpack .../33-libplexus-classworlds-java_2.5.2-2_all.deb ...
+Unpacking libplexus-classworlds-java (2.5.2-2) ...
+Selecting previously unselected package libplexus-component-annotations-java.
+Preparing to unpack .../34-libplexus-component-annotations-java_1.7.1-7_all.deb ...
+Unpacking libplexus-component-annotations-java (1.7.1-7) ...
+Selecting previously unselected package libplexus-interpolation-java.
+Preparing to unpack .../35-libplexus-interpolation-java_1.24-1_all.deb ...
+Unpacking libplexus-interpolation-java (1.24-1) ...
+Selecting previously unselected package libplexus-sec-dispatcher-java.
+Preparing to unpack .../36-libplexus-sec-dispatcher-java_1.4-3_all.deb ...
+Unpacking libplexus-sec-dispatcher-java (1.4-3) ...
+Selecting previously unselected package libslf4j-java.
+Preparing to unpack .../37-libslf4j-java_1.7.25-3_all.deb ...
+Unpacking libslf4j-java (1.7.25-3) ...
+Selecting previously unselected package libsisu-inject-java.
+Preparing to unpack .../38-libsisu-inject-java_0.3.2-2_all.deb ...
+Unpacking libsisu-inject-java (0.3.2-2) ...
+Selecting previously unselected package libsisu-plexus-java.
+Preparing to unpack .../39-libsisu-plexus-java_0.3.3-3_all.deb ...
+Unpacking libsisu-plexus-java (0.3.3-3) ...
+Selecting previously unselected package libmaven3-core-java.
+Preparing to unpack .../40-libmaven3-core-java_3.6.0-1~18.04.1_all.deb ...
+Unpacking libmaven3-core-java (3.6.0-1~18.04.1) ...
+Selecting previously unselected package libsm-dev:amd64.
+Preparing to unpack .../41-libsm-dev_2%3a1.2.2-1_amd64.deb ...
+Unpacking libsm-dev:amd64 (2:1.2.2-1) ...
+Selecting previously unselected package libwagon-file-java.
+Preparing to unpack .../42-libwagon-file-java_3.0.0-2_all.deb ...
+Unpacking libwagon-file-java (3.0.0-2) ...
+Selecting previously unselected package libwagon-http-shaded-java.
+Preparing to unpack .../43-libwagon-http-shaded-java_3.0.0-2_all.deb ...
+Unpacking libwagon-http-shaded-java (3.0.0-2) ...
+Selecting previously unselected package libxt-dev:amd64.
+Preparing to unpack .../44-libxt-dev_1%3a1.1.5-1_amd64.deb ...
+Unpacking libxt-dev:amd64 (1:1.1.5-1) ...
+Selecting previously unselected package maven.
+Preparing to unpack .../45-maven_3.6.0-1~18.04.1_all.deb ...
+Unpacking maven (3.6.0-1~18.04.1) ...
+Selecting previously unselected package openjdk-8-jre:amd64.
+Preparing to unpack .../46-openjdk-8-jre_8u242-b08-0ubuntu3~18.04_amd64.deb ...
+Unpacking openjdk-8-jre:amd64 (8u242-b08-0ubuntu3~18.04) ...
+Selecting previously unselected package openjdk-8-jdk-headless:amd64.
+Preparing to unpack .../47-openjdk-8-jdk-headless_8u242-b08-0ubuntu3~18.04_amd64.deb ...
+Unpacking openjdk-8-jdk-headless:amd64 (8u242-b08-0ubuntu3~18.04) ...
+Selecting previously unselected package openjdk-8-jdk:amd64.
+Preparing to unpack .../48-openjdk-8-jdk_8u242-b08-0ubuntu3~18.04_amd64.deb ...
+Unpacking openjdk-8-jdk:amd64 (8u242-b08-0ubuntu3~18.04) ...
+Selecting previously unselected package sbt.
+Preparing to unpack .../49-sbt_1.3.8_all.deb ...
+Unpacking sbt (1.3.8) ...
+Selecting previously unselected package scala-library.
+Preparing to unpack .../50-scala-library_2.11.12-4~18.04_all.deb ...
+Unpacking scala-library (2.11.12-4~18.04) ...
+Selecting previously unselected package scala-parser-combinators.
+Preparing to unpack .../51-scala-parser-combinators_1.0.3-3_all.deb ...
+Unpacking scala-parser-combinators (1.0.3-3) ...
+Selecting previously unselected package scala-xml.
+Preparing to unpack .../52-scala-xml_1.0.3-3_all.deb ...
+Unpacking scala-xml (1.0.3-3) ...
+Selecting previously unselected package scala.
+Preparing to unpack .../53-scala_2.11.12-4~18.04_all.deb ...
+Unpacking scala (2.11.12-4~18.04) ...
+Setting up libslf4j-java (1.7.25-3) ...
+Setting up libplexus-classworlds-java (2.5.2-2) ...
+Setting up scala-parser-combinators (1.0.3-3) ...
+Setting up libhawtjni-runtime-java (1.15-2) ...
+Setting up openjdk-8-jdk-headless:amd64 (8u242-b08-0ubuntu3~18.04) ...
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jdeps to provide /usr/bin/jdeps (jdeps) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/wsimport to provide /usr/bin/wsimport (wsimport) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/rmic to provide /usr/bin/rmic (rmic) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jinfo to provide /usr/bin/jinfo (jinfo) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jsadebugd to provide /usr/bin/jsadebugd (jsadebugd) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/native2ascii to provide /usr/bin/native2ascii (native2ascii) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jstat to provide /usr/bin/jstat (jstat) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/javac to provide /usr/bin/javac (javac) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/javah to provide /usr/bin/javah (javah) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/idlj to provide /usr/bin/idlj (idlj) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/clhsdb to provide /usr/bin/clhsdb (clhsdb) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jstack to provide /usr/bin/jstack (jstack) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jrunscript to provide /usr/bin/jrunscript (jrunscript) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/javadoc to provide /usr/bin/javadoc (javadoc) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/javap to provide /usr/bin/javap (javap) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jar to provide /usr/bin/jar (jar) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/xjc to provide /usr/bin/xjc (xjc) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/hsdb to provide /usr/bin/hsdb (hsdb) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/schemagen to provide /usr/bin/schemagen (schemagen) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jps to provide /usr/bin/jps (jps) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/extcheck to provide /usr/bin/extcheck (extcheck) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jmap to provide /usr/bin/jmap (jmap) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jstatd to provide /usr/bin/jstatd (jstatd) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jhat to provide /usr/bin/jhat (jhat) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jdb to provide /usr/bin/jdb (jdb) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/serialver to provide /usr/bin/serialver (serialver) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/wsgen to provide /usr/bin/wsgen (wsgen) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jcmd to provide /usr/bin/jcmd (jcmd) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jarsigner to provide /usr/bin/jarsigner (jarsigner) in auto mode
+Setting up libplexus-cipher-java (1.7-3) ...
+Setting up libplexus-interpolation-java (1.24-1) ...
+Setting up scala-library (2.11.12-4~18.04) ...
+Setting up libplexus-component-annotations-java (1.7.1-7) ...
+Setting up libxmuu1:amd64 (2:1.1.2-2) ...
+Setting up libplexus-utils2-java (3.0.24-3) ...
+Setting up scala-xml (1.0.3-3) ...
+Setting up libwagon-provider-api-java (3.0.0-2) ...
+Setting up libjsr305-java (0.1~+svn49-10) ...
+Setting up libxxf86dga1:amd64 (2:1.1.4-1) ...
+Setting up libgeronimo-interceptor-3.0-spec-java (1.0.1-4fakesync) ...
+Setting up libmaven-resolver-java (1.3.1-1~18.04) ...
+Setting up libice-dev:amd64 (2:1.0.9-2) ...
+Setting up libjansi-native-java (1.7-1) ...
+Setting up libwagon-http-shaded-java (3.0.0-2) ...
+Setting up libapache-pom-java (18-1) ...
+Setting up junit (3.8.2-9) ...
+Setting up libfontenc1:amd64 (1:1.1.3-1) ...
+Setting up libatinject-jsr330-api-java (1.0+ds1-5) ...
+Setting up libmaven-parent-java (31-2~18.04) ...
+Setting up sbt (1.3.8) ...
+Creating system group: sbt
+Creating system user: sbt in sbt with sbt daemon-user and shell /bin/false
+Setting up libaopalliance-java (20070526-6) ...
+Setting up libgeronimo-annotation-1.3-spec-java (1.0-1) ...
+Setting up libhamcrest-java (1.3-7) ...
+Setting up libcommons-cli-java (1.4-1) ...
+Setting up libplexus-sec-dispatcher-java (1.4-3) ...
+Setting up libsm-dev:amd64 (2:1.2.2-1) ...
+Setting up libjansi-java (1.16-1) ...
+Setting up libguava-java (19.0-1) ...
+Setting up x11-utils (7.7+3build1) ...
+Setting up libwagon-file-java (3.0.0-2) ...
+Setting up libcommons-parent-java (43-1) ...
+Setting up libcdi-api-java (1.2-2) ...
+Setting up libjline2-java (2.14.6-1) ...
+Setting up libcommons-lang3-java (3.8-1~18.04.2) ...
+Setting up junit4 (4.12-8~18.04) ...
+Setting up scala (2.11.12-4~18.04) ...
+update-alternatives: using /usr/share/scala-2.11/bin/scala to provide /usr/bin/scala (scala) in auto mode
+Setting up libatk-wrapper-java (0.33.3-20ubuntu0.1) ...
+Setting up libxt-dev:amd64 (1:1.1.5-1) ...
+Setting up libcommons-io-java (2.6-2) ...
+Setting up libguice-java (4.0-4) ...
+Setting up libmaven-shared-utils-java (3.3.0-1~18.04) ...
+Setting up libatk-wrapper-java-jni:amd64 (0.33.3-20ubuntu0.1) ...
+Setting up libsisu-inject-java (0.3.2-2) ...
+Setting up libsisu-plexus-java (0.3.3-3) ...
+Setting up openjdk-8-jre:amd64 (8u242-b08-0ubuntu3~18.04) ...
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/policytool to provide /usr/bin/policytool (policytool) in auto mode
+Setting up libmaven3-core-java (3.6.0-1~18.04.1) ...
+Setting up openjdk-8-jdk:amd64 (8u242-b08-0ubuntu3~18.04) ...
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/appletviewer to provide /usr/bin/appletviewer (appletviewer) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jconsole to provide /usr/bin/jconsole (jconsole) in auto mode
+Setting up maven (3.6.0-1~18.04.1) ...
+update-alternatives: using /usr/share/maven/bin/mvn to provide /usr/bin/mvn (mvn) in auto mode
+Processing triggers for hicolor-icon-theme (0.17-2) ...
+Processing triggers for mime-support (3.60ubuntu1) ...
+Processing triggers for libc-bin (2.27-3ubuntu1) ...
+Removing intermediate container 0ba6e1ea6e65
+ ---> a23d32cd2d57
+Step 5/17 : RUN chown -R $NB_UID /home/jovyan/.conda
+ ---> Running in 4d4fec8560ee
+Removing intermediate container 4d4fec8560ee
+ ---> e8fefd02caed
+Step 6/17 : USER $NB_UID
+ ---> Running in 7743b2de1775
+Removing intermediate container 7743b2de1775
+ ---> ebe87aaa1a2a
+Step 7/17 : RUN conda update -y conda &&     conda install -c conda-forge --yes         'dask==2.10.0'        'nodejs'        'ipympl'        'ipywidgets'        'gdal==2.4.*'        'pandas==1.*'        'statsmodels'        'pydotplus'        'memory_profiler'        'ipyparallel'        'snappy'        'fastparquet'        'geopy'        'geopandas'        'shapely'        'osmnx'        'folium'        'ipyleaflet'        'cartopy'        'selenium'        'geckodriver'        'firefox'        'holoviews'        'python-igraph'        'tensorflow=2.*'        'tensorflow-datasets'        'somoclu'        'watermark'        'd3'        'pygraphviz'        'swifter'        'imbalanced-learn'        'xgboost'        'lightgbm'        'optuna'        'hyperopt'        'umap-learn'        'featuretools'        'django'        'flask'        'sqlite'        'blaze'        'pyprind'        'nltk'        'wtforms'        'opencv' &&         conda clean --all -f --yes &&         fix-permissions $CONDA_DIR
+ ---> Running in de570a53789f
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /opt/conda
+
+  added / updated specs:
+    - conda
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    _openmp_mutex-4.5          |           1_llvm           5 KB  conda-forge
+    alembic-1.4.0              |             py_0         109 KB  conda-forge
+    bleach-3.1.1               |             py_0         111 KB  conda-forge
+    curl-7.68.0                |       hf8cf82a_0         137 KB  conda-forge
+    distributed-2.11.0         |           py37_0         986 KB  conda-forge
+    idna-2.9                   |             py_1          52 KB  conda-forge
+    ipython-7.12.0             |   py37h5ca1d4c_0         1.1 MB  conda-forge
+    jinja2-2.11.1              |             py_0          94 KB  conda-forge
+    json5-0.9.0                |             py_0          24 KB  conda-forge
+    jupyter_client-6.0.0       |             py_0          71 KB  conda-forge
+    jupyter_core-4.6.3         |           py37_0          71 KB  conda-forge
+    jupyter_telemetry-0.0.5    |             py_0           8 KB  conda-forge
+    libcurl-7.68.0             |       hda55be3_0         564 KB  conda-forge
+    libedit-3.1.20170329       |    hf8c457e_1001         172 KB  conda-forge
+    libopenblas-0.3.7          |       h5ec1e0e_7         7.6 MB  conda-forge
+    llvm-openmp-9.0.1          |       hc9558a2_2         782 KB  conda-forge
+    make-4.3                   |       h516909a_0         505 KB  conda-forge
+    nodejs-13.9.0              |       h10a4023_0        13.7 MB  conda-forge
+    pandoc-2.9.2               |                0        16.8 MB  conda-forge
+    parso-0.6.1                |             py_0          66 KB  conda-forge
+    pycparser-2.19             |             py_2          88 KB  conda-forge
+    pycurl-7.43.0.5            |   py37h16ce93b_0          69 KB  conda-forge
+    pyopenssl-19.1.0           |             py_1          47 KB  conda-forge
+    pyzmq-19.0.0               |   py37h1768529_0         489 KB  conda-forge
+    r-cli-2.0.2                |    r36h6115d3f_0         396 KB  conda-forge
+    r-digest-0.6.25            |    r36h0357c0b_0         198 KB  conda-forge
+    r-matrix-1.2_18            |    r36h7fa42b6_2         3.8 MB  conda-forge
+    r-uuid-0.1_4               |    r36hcdcec82_0          22 KB  conda-forge
+    r-vctrs-0.2.3              |    r36hcdcec82_0         892 KB  conda-forge
+    requests-2.23.0            |           py37_0          85 KB  conda-forge
+    setuptools-45.2.0          |           py37_0         654 KB  conda-forge
+    sqlite-3.30.1              |       hcee41ef_0         2.0 MB  conda-forge
+    tornado-6.0.3              |   py37h516909a_4         636 KB  conda-forge
+    tqdm-4.43.0                |             py_0          47 KB  conda-forge
+    wheel-0.34.2               |             py_1          24 KB  conda-forge
+    zict-2.0.0                 |             py_0          10 KB  conda-forge
+    zipp-3.0.0                 |             py_0          10 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:        52.3 MB
+
+The following NEW packages will be INSTALLED:
+
+  llvm-openmp        conda-forge/linux-64::llvm-openmp-9.0.1-hc9558a2_2
+
+The following packages will be REMOVED:
+
+  inflect-4.0.0-py37_1
+  jaraco.itertools-5.0.0-py_0
+  more-itertools-8.2.0-py_0
+
+The following packages will be UPDATED:
+
+  alembic                                        1.3.3-py_0 --> 1.4.0-py_0
+  bleach                                         3.1.0-py_0 --> 3.1.1-py_0
+  curl                                    7.65.3-hf8cf82a_0 --> 7.68.0-hf8cf82a_0
+  distributed        conda-forge/noarch::distributed-2.10.~ --> conda-forge/linux-64::distributed-2.11.0-py37_0
+  idna               conda-forge/linux-64::idna-2.8-py37_1~ --> conda-forge/noarch::idna-2.9-py_1
+  ipython                             7.11.1-py37h5ca1d4c_0 --> 7.12.0-py37h5ca1d4c_0
+  jinja2                                        2.11.0-py_0 --> 2.11.1-py_0
+  json5                                          0.8.5-py_0 --> 0.9.0-py_0
+  jupyter_client     conda-forge/linux-64::jupyter_client-~ --> conda-forge/noarch::jupyter_client-6.0.0-py_0
+  jupyter_core                                 4.6.1-py37_0 --> 4.6.3-py37_0
+  jupyter_telemetry                              0.0.4-py_0 --> 0.0.5-py_0
+  libcurl                                 7.65.3-hda55be3_0 --> 7.68.0-hda55be3_0
+  libopenblas                              0.3.7-h5ec1e0e_6 --> 0.3.7-h5ec1e0e_7
+  make                                  4.2.1-h14c3975_2004 --> 4.3-h516909a_0
+  nodejs                                  13.7.0-h10a4023_0 --> 13.9.0-h10a4023_0
+  pandoc                                          2.9.1.1-0 --> 2.9.2-0
+  parso                                          0.6.0-py_0 --> 0.6.1-py_0
+  pycparser          conda-forge/linux-64::pycparser-2.19-~ --> conda-forge/noarch::pycparser-2.19-py_2
+  pycurl                            7.43.0.4-py37h16ce93b_0 --> 7.43.0.5-py37h16ce93b_0
+  pyopenssl          conda-forge/linux-64::pyopenssl-19.1.~ --> conda-forge/noarch::pyopenssl-19.1.0-py_1
+  pyzmq                               18.1.1-py37h1768529_0 --> 19.0.0-py37h1768529_0
+  r-cli                                 2.0.1-r36h6115d3f_0 --> 2.0.2-r36h6115d3f_0
+  r-digest                             0.6.24-r36h0357c0b_0 --> 0.6.25-r36h0357c0b_0
+  r-matrix                             1.2_18-r36hcdcec82_1 --> 1.2_18-r36h7fa42b6_2
+  r-uuid                             0.1_2-r36hcdcec82_1002 --> 0.1_4-r36hcdcec82_0
+  r-vctrs                               0.2.2-r36hcdcec82_0 --> 0.2.3-r36hcdcec82_0
+  requests                                    2.22.0-py37_1 --> 2.23.0-py37_0
+  setuptools                                  45.1.0-py37_0 --> 45.2.0-py37_0
+  tornado                              6.0.3-py37h516909a_0 --> 6.0.3-py37h516909a_4
+  tqdm                                          4.42.0-py_0 --> 4.43.0-py_0
+  wheel              conda-forge/linux-64::wheel-0.34.1-py~ --> conda-forge/noarch::wheel-0.34.2-py_1
+  zict                                           1.0.0-py_0 --> 2.0.0-py_0
+  zipp                                           2.1.0-py_0 --> 3.0.0-py_0
+
+The following packages will be SUPERSEDED by a higher-priority channel:
+
+  libedit            pkgs/main::libedit-3.1.20181209-hc058~ --> conda-forge::libedit-3.1.20170329-hf8c457e_1001
+  sqlite                pkgs/main::sqlite-3.30.1-h7b6447c_0 --> conda-forge::sqlite-3.30.1-hcee41ef_0
+
+The following packages will be DOWNGRADED:
+
+  _openmp_mutex                                   4.5-0_gnu --> 4.5-1_llvm
+
+
+
+Downloading and Extracting Packages
+parso-0.6.1          | 66 KB     |            |   0% parso-0.6.1          | 66 KB     | ##4        |  24% parso-0.6.1          | 66 KB     | ########## | 100% 
+tqdm-4.43.0          | 47 KB     |            |   0% tqdm-4.43.0          | 47 KB     | ########## | 100% 
+make-4.3             | 505 KB    |            |   0% make-4.3             | 505 KB    | ########## | 100% 
+alembic-1.4.0        | 109 KB    |            |   0% alembic-1.4.0        | 109 KB    | ########## | 100% 
+zipp-3.0.0           | 10 KB     |            |   0% zipp-3.0.0           | 10 KB     | ########## | 100% 
+setuptools-45.2.0    | 654 KB    |            |   0% setuptools-45.2.0    | 654 KB    | ########## | 100% 
+jinja2-2.11.1        | 94 KB     |            |   0% jinja2-2.11.1        | 94 KB     | ########## | 100% 
+r-matrix-1.2_18      | 3.8 MB    |            |   0% r-matrix-1.2_18      | 3.8 MB    | ###4       |  34% r-matrix-1.2_18      | 3.8 MB    | ########7  |  88% r-matrix-1.2_18      | 3.8 MB    | ########## | 100% 
+r-uuid-0.1_4         | 22 KB     |            |   0% r-uuid-0.1_4         | 22 KB     | ########## | 100% 
+curl-7.68.0          | 137 KB    |            |   0% curl-7.68.0          | 137 KB    | ########## | 100% 
+_openmp_mutex-4.5    | 5 KB      |            |   0% _openmp_mutex-4.5    | 5 KB      | ########## | 100% 
+sqlite-3.30.1        | 2.0 MB    |            |   0% sqlite-3.30.1        | 2.0 MB    | ########9  |  89% sqlite-3.30.1        | 2.0 MB    | ########## | 100% 
+jupyter_telemetry-0. | 8 KB      |            |   0% jupyter_telemetry-0. | 8 KB      | ########## | 100% 
+pycurl-7.43.0.5      | 69 KB     |            |   0% pycurl-7.43.0.5      | 69 KB     | ########## | 100% 
+pyzmq-19.0.0         | 489 KB    |            |   0% pyzmq-19.0.0         | 489 KB    | ########## | 100% 
+json5-0.9.0          | 24 KB     |            |   0% json5-0.9.0          | 24 KB     | ########## | 100% 
+libopenblas-0.3.7    | 7.6 MB    |            |   0% libopenblas-0.3.7    | 7.6 MB    | ##1        |  22% libopenblas-0.3.7    | 7.6 MB    | ####3      |  44% libopenblas-0.3.7    | 7.6 MB    | #######6   |  76% libopenblas-0.3.7    | 7.6 MB    | ########## | 100% 
+llvm-openmp-9.0.1    | 782 KB    |            |   0% llvm-openmp-9.0.1    | 782 KB    | ########## | 100% 
+r-cli-2.0.2          | 396 KB    |            |   0% r-cli-2.0.2          | 396 KB    | ########## | 100% 
+idna-2.9             | 52 KB     |            |   0% idna-2.9             | 52 KB     | ########## | 100% 
+bleach-3.1.1         | 111 KB    |            |   0% bleach-3.1.1         | 111 KB    | ########## | 100% 
+pandoc-2.9.2         | 16.8 MB   |            |   0% pandoc-2.9.2         | 16.8 MB   | #          |  10% pandoc-2.9.2         | 16.8 MB   | ##4        |  25% pandoc-2.9.2         | 16.8 MB   | ###9       |  39% pandoc-2.9.2         | 16.8 MB   | #####3     |  53% pandoc-2.9.2         | 16.8 MB   | ######7    |  68% pandoc-2.9.2         | 16.8 MB   | ########1  |  82% pandoc-2.9.2         | 16.8 MB   | #########6 |  96% pandoc-2.9.2         | 16.8 MB   | ########## | 100% 
+jupyter_core-4.6.3   | 71 KB     |            |   0% jupyter_core-4.6.3   | 71 KB     | ########## | 100% 
+nodejs-13.9.0        | 13.7 MB   |            |   0% nodejs-13.9.0        | 13.7 MB   | 9          |   9% nodejs-13.9.0        | 13.7 MB   | ##6        |  27% nodejs-13.9.0        | 13.7 MB   | ###6       |  37% nodejs-13.9.0        | 13.7 MB   | #####2     |  52% nodejs-13.9.0        | 13.7 MB   | ######9    |  70% nodejs-13.9.0        | 13.7 MB   | ########2  |  82% nodejs-13.9.0        | 13.7 MB   | #########9 |  99% nodejs-13.9.0        | 13.7 MB   | ########## | 100% 
+pycparser-2.19       | 88 KB     |            |   0% pycparser-2.19       | 88 KB     | ########## | 100% 
+zict-2.0.0           | 10 KB     |            |   0% zict-2.0.0           | 10 KB     | ########## | 100% 
+r-vctrs-0.2.3        | 892 KB    |            |   0% r-vctrs-0.2.3        | 892 KB    | ########## | 100% 
+tornado-6.0.3        | 636 KB    |            |   0% tornado-6.0.3        | 636 KB    | ########## | 100% 
+distributed-2.11.0   | 986 KB    |            |   0% distributed-2.11.0   | 986 KB    | ####8      |  49% distributed-2.11.0   | 986 KB    | ########## | 100% 
+ipython-7.12.0       | 1.1 MB    |            |   0% ipython-7.12.0       | 1.1 MB    | ########## | 100% 
+r-digest-0.6.25      | 198 KB    |            |   0% r-digest-0.6.25      | 198 KB    | ########## | 100% 
+pyopenssl-19.1.0     | 47 KB     |            |   0% pyopenssl-19.1.0     | 47 KB     | ########## | 100% 
+wheel-0.34.2         | 24 KB     |            |   0% wheel-0.34.2         | 24 KB     | ########## | 100% 
+libcurl-7.68.0       | 564 KB    |            |   0% libcurl-7.68.0       | 564 KB    | ########## | 100% 
+requests-2.23.0      | 85 KB     |            |   0% requests-2.23.0      | 85 KB     | ########## | 100% 
+libedit-3.1.20170329 | 172 KB    |            |   0% libedit-3.1.20170329 | 172 KB    | ########## | 100% 
+jupyter_client-6.0.0 | 71 KB     |            |   0% jupyter_client-6.0.0 | 71 KB     | ########## | 100% 
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+[91m
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.7.12
+  latest version: 4.8.2
+
+Please update conda by running
+
+    $ conda update -n base conda
+
+
+[0mCollecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... failed with initial frozen solve. Retrying with flexible solve.
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... 

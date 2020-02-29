@@ -1,23 +1,13 @@
-#FROM jupyter/scipy-notebook:latest
-#FROM jupyter/pyspark-notebook:latest
-FROM jupyter/all-spark-notebook:latest
+#FROM jupyter/all-spark-notebook:latest
 #FROM jupyter/pyspark-notebook:ad3574d3c5c7
+FROM jupyter/all-spark-notebook:63d0df23b673
 # change UID & GID
-#COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-#RUN chmod +x /usr/local/bin/entrypoint.sh
-#ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 #USER root
 #RUN usermod -u 1002 jovyan
 
 # package install
 USER root
-#RUN apt update && \
-#    apt install -y --no-install-recommends \
-#    build-essential\
-#    swig\
-#    vim \
-#    graphviz\
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential\
@@ -54,8 +44,8 @@ RUN chown -R $NB_UID /home/jovyan/.conda
 
 USER $NB_UID
 RUN conda update -y conda && \
-#	conda install -y \
     conda install -c conda-forge --yes \
+#        'dask==2.10.0'\
         'nodejs'\
         'ipympl'\
         'ipywidgets'\
@@ -72,6 +62,7 @@ RUN conda update -y conda && \
         'shapely'\
         'osmnx'\
         'folium'\
+        'ipyleaflet'\
         'cartopy'\
         'selenium'\
         'geckodriver'\
@@ -82,14 +73,17 @@ RUN conda update -y conda && \
         'tensorflow-datasets'\
         'somoclu'\
         'watermark'\
-#	'keras'\
-        'chainer'\
+#        'chainer'\
         'd3'\
         'pygraphviz'\
         'swifter'\
         'imbalanced-learn'\
         'xgboost'\
         'lightgbm'\
+        'optuna'\
+        'hyperopt'\
+        'umap-learn'\
+        'featuretools'\
         'django'\
         'flask'\
         'sqlite'\
@@ -97,12 +91,12 @@ RUN conda update -y conda && \
         'pyprind'\
         'nltk'\
         'wtforms'\
-        'opencv' \
-        'autopep8' \
-        'flake8' \
-        'jupyter_contrib_nbextensions' \
-        'jupyterlab-nvdashboard' \
-        'jupyterlab_code_formatter' && \
+        'opencv' && \
+#        'autopep8' \
+#        'flake8' \
+#        'jupyter_contrib_nbextensions' && \
+#        'jupyterlab-nvdashboard' \
+#        'jupyterlab_code_formatter' && \
         conda clean --all -f --yes && \
         fix-permissions $CONDA_DIR
 
@@ -130,6 +124,11 @@ RUN /usr/local/spark/bin/pyspark --packages graphframes:graphframes:0.7.0-spark2
 
 #RUN pip install --user mca py_d3 somoclu smopy
 RUN pip install --user \
+#                 hyperopt \
+#                 optuna \
+#                 umap-learn \
+                 bhtsne \
+                 Boruta \
        	         mca \
                  py_d3 \
                  smopy \
@@ -152,11 +151,11 @@ RUN wget https://ipafont.ipa.go.jp/IPAexfont/ipaexg00401.zip \
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
 RUN jupyter labextension install jupyter-matplotlib
 RUN jupyter labextension install @lckr/jupyterlab_variableinspector
-RUN jupyter labextension install @jupyterlab/toc
+#RUN jupyter labextension install @jupyterlab/toc
 #RUN jupyter labextension install @ryantam626/jupyterlab_code_formatter
 #RUN jupyter serverextension enable --py jupyterlab_code_formatter
 #RUN jupyter labextension install jupyterlab_vim
-RUN jupyter labextension install jupyterlab-nvdashboard
+#RUN jupyter labextension install jupyterlab-nvdashboard
 #RUN jupyter labextension install jupyterlab-flake8
 #RUN jupyter contrib nbextension install --user
 
@@ -166,5 +165,6 @@ ENV JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64" \
     SPARK_HOME="/usr/local/spark" \
     PATH="$PATH:$SPARK_HOME/bin" \
     PYSPARK_PYTHON="/opt/conda/bin/python" \
-    PYTHONPATH="$(ls -a ${SPARK_HOME}/python/lib/py4j-*-src.zip):${SPARK_HOME}/python:$PYTHONPATH"
+    ARROW_PRE_0_15_IPC_FORMAT=1
+#    PYTHONPATH="$(ls -a ${SPARK_HOME}/python/lib/py4j-*-src.zip):${SPARK_HOME}/python:$PYTHONPATH"
 

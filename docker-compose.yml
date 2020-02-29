@@ -2,10 +2,9 @@ version: '3'
 
 services:
   jupyternotebook:
-    #image: jupyter/base-notebook:latest
-    image: jupyter-geo:2020-01-29 # tmp
-    #image: spark-jupyter:2020-02-15_2  # bug
-    #build: .
+    #image: jupyter-geo:2020-01-29 # tmp
+    image: spark-jupyter:2020-02-29  #
+    build: .
     user: root
     # URLに書いてある設定を読んで以下のenvironmentを書く。
     environment:

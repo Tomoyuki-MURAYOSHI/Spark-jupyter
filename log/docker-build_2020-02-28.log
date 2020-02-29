@@ -1,0 +1,81 @@
+Step 1/17 : FROM jupyter/all-spark-notebook:latest
+ ---> 5e160ef2ea72
+Step 2/17 : USER root
+ ---> Using cache
+ ---> c3a9b34070c3
+Step 3/17 : RUN apt-get update &&     apt-get install -y --no-install-recommends     build-essential    curl    gnupg    swig    vim     graphviz
+ ---> Using cache
+ ---> 616a86ee0f6f
+Step 4/17 : RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list &&     curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add &&     apt-get update &&     apt-get install -y     scala    openjdk-8-jdk    maven    junit    junit4    sbt
+ ---> Using cache
+ ---> dfdf4e5d1838
+Step 5/17 : RUN chown -R $NB_UID /home/jovyan/.conda
+ ---> Using cache
+ ---> 1ce0ba2772c9
+Step 6/17 : USER $NB_UID
+ ---> Using cache
+ ---> bc7747d01018
+Step 7/17 : RUN conda update -y conda &&     conda install -c conda-forge --yes         'nodejs'        'ipympl'        'ipywidgets'        'gdal==2.4.*'        'pandas==1.*'        'statsmodels'        'pydotplus'        'memory_profiler'        'ipyparallel'        'snappy'        'fastparquet'        'geopy'        'geopandas'        'shapely'        'osmnx'        'folium'        'ipyleaflet'        'cartopy'        'selenium'        'geckodriver'        'firefox'        'holoviews'        'python-igraph'        'tensorflow=2.*'        'tensorflow-datasets'        'somoclu'        'watermark'        'd3'        'pygraphviz'        'swifter'        'imbalanced-learn'        'xgboost'        'lightgbm'        'optuna'        'featuretools'        'django'        'flask'        'blaze'        'pyprind'        'nltk'        'wtforms'        'opencv'         'jupyter_contrib_nbextensions' &&         conda clean --all -f --yes &&         fix-permissions $CONDA_DIR
+ ---> Running in 9e5dbe705cb4
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /opt/conda
+
+  added / updated specs:
+    - conda
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    _openmp_mutex-4.5          |           1_llvm           5 KB  conda-forge
+    libopenblas-0.3.7          |       h5ec1e0e_7         7.6 MB  conda-forge
+    llvm-openmp-9.0.1          |       hc9558a2_2         782 KB  conda-forge
+    r-cli-2.0.2                |    r36h6115d3f_0         396 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:         8.8 MB
+
+The following NEW packages will be INSTALLED:
+
+  llvm-openmp        conda-forge/linux-64::llvm-openmp-9.0.1-hc9558a2_2
+
+The following packages will be UPDATED:
+
+  libopenblas                              0.3.7-h5ec1e0e_6 --> 0.3.7-h5ec1e0e_7
+  r-cli                                 2.0.1-r36h6115d3f_0 --> 2.0.2-r36h6115d3f_0
+
+The following packages will be DOWNGRADED:
+
+  _openmp_mutex                                   4.5-0_gnu --> 4.5-1_llvm
+
+
+
+Downloading and Extracting Packages
+llvm-openmp-9.0.1    | 782 KB    |            |   0% llvm-openmp-9.0.1    | 782 KB    | 2          |   2% llvm-openmp-9.0.1    | 782 KB    | ########## | 100% 
+libopenblas-0.3.7    | 7.6 MB    |            |   0% libopenblas-0.3.7    | 7.6 MB    | #3         |  14% libopenblas-0.3.7    | 7.6 MB    | ###5       |  35% libopenblas-0.3.7    | 7.6 MB    | ######7    |  67% libopenblas-0.3.7    | 7.6 MB    | #########8 |  99% libopenblas-0.3.7    | 7.6 MB    | ########## | 100% 
+_openmp_mutex-4.5    | 5 KB      |            |   0% _openmp_mutex-4.5    | 5 KB      | ########## | 100% 
+r-cli-2.0.2          | 396 KB    |            |   0% r-cli-2.0.2          | 396 KB    | ########## | 100% 
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+[91m
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.7.12
+  latest version: 4.8.2
+
+Please update conda by running
+
+    $ conda update -n base conda
+
+
+[0mCollecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... failed with initial frozen solve. Retrying with flexible solve.
+Solving environment: ...working... failed with repodata from current_repodata.json, will retry with next repodata source.
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... failed with initial frozen solve. Retrying with flexible solve.
+Solving environment: ...working... 
