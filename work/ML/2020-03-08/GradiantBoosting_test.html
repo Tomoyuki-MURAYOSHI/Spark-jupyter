@@ -14258,12 +14258,270 @@ Wall time: 7.45 s
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>parameter-tuning x cross-validation</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[132]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+
+
+<span class="n">eval_results</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># pipeline</span>
+<span class="n">pl_xgb</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">&quot;XGB&quot;</span><span class="p">,</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBRegressor</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="s2">&quot;reg:squarederror&quot;</span><span class="p">,</span>
+                             <span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                             <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">xgb</span><span class="o">.</span><span class="n">callback</span><span class="o">.</span><span class="n">record_evaluation</span><span class="p">(</span><span class="n">eval_result</span><span class="o">=</span><span class="n">eval_results</span><span class="p">),],</span>  <span class="c1"># うまく働いていない様子?</span>
+                             <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="c1"># GridSearch用パラメータ（仮） 要ブラッシュアップ</span>
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く</span>
+    <span class="s1">&#39;XGB__learning_rate&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,],</span> 
+    <span class="s1">&#39;XGB__max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,],</span> 
+    <span class="s1">&#39;XGB__subsample&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> 
+    <span class="s1">&#39;XGB__colsample_bytree&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="n">fit_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;XGB__eval_set&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)],</span>
+    <span class="s2">&quot;XGB__eval_metric&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;rmse&quot;</span><span class="p">,</span><span class="s2">&quot;mae&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;XGB__verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;XGB__early_stopping_rounds&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">gs</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">pl_xgb</span><span class="p">,</span>                           
+                  <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>                           
+                  <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span>                           
+                  <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>                        
+                  <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>                          
+                 <span class="p">)</span>
+
+<span class="c1">#grid_search.fit(X_train, y_train, **fit_params)</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">gs</span><span class="p">,</span>
+                         <span class="n">X_train</span><span class="p">,</span>
+                         <span class="n">y_train</span><span class="p">,</span>
+                         <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span>
+                         <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                         <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_params</span>
+                        <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 7.12 s, sys: 0 ns, total: 7.12 s
+Wall time: 7.14 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[133]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scores</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[133]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([0.88062562, 0.8007626 , 0.89162789, 0.84986566, 0.86660863])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[134]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0.8578980789199602 0.031809111556111706
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>↑モデルを何にするかの基準に使える</li>
+</ul>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>lightgbm</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+
+<span class="n">eval_results</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># pipeline</span>
+<span class="n">pl_lgbm</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">&quot;IMP&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=-</span><span class="mi">99999</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;LGBM&quot;</span><span class="p">,</span> <span class="n">lgb</span><span class="o">.</span><span class="n">LGBMRegressor</span><span class="p">(</span>
+                             <span class="n">objective</span><span class="o">=</span><span class="s2">&quot;reg:squarederror&quot;</span><span class="p">,</span>
+                             <span class="c1">#eval_metric=&quot;rmse&quot;,</span>
+                             <span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                             <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">xgb</span><span class="o">.</span><span class="n">callback</span><span class="o">.</span><span class="n">record_evaluation</span><span class="p">(</span><span class="n">eval_result</span><span class="o">=</span><span class="n">eval_results</span><span class="p">),],</span>  <span class="c1"># うまく働いていない様子?</span>
+                             <span class="c1">#verbosity=0,  # silent</span>
+                             <span class="c1">#silent=True,</span>
+                             <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="c1"># GridSearch用パラメータ（仮） 要ブラッシュアップ</span>
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く</span>
+    <span class="s1">&#39;XGB__learning_rate&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,],</span> 
+    <span class="s1">&#39;XGB__max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> 
+    <span class="s1">&#39;XGB__subsample&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> 
+    <span class="s1">&#39;XGB__colsample_bytree&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="n">fit_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;XGB__eval_set&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)],</span>
+    <span class="s2">&quot;XGB__eval_metric&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;rmse&quot;</span><span class="p">,</span><span class="s2">&quot;mae&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;XGB__verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;XGB__early_stopping_rounds&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">pl_xgb</span><span class="p">,</span>
+                           <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+                           <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span>
+                           <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                           <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                          <span class="p">)</span>
+
+<span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_params</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lgb</span><span class="o">.</span><span class="n">LGBMRegressor</span>
 </pre></div>
 
     </div>

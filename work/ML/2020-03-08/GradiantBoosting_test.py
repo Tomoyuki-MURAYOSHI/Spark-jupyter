@@ -307,8 +307,56 @@ len(df_evals2)
 
 
 
+# - parameter-tuning x cross-validation
+
+# In[132]:
+
+
+get_ipython().run_cell_magic('time', '', '\n\neval_results = {}\n\n# pipeline\npl_xgb = Pipeline([\n    ("XGB", xgb.XGBRegressor(objective="reg:squarederror",\n                             n_estimators=1000,\n                             callbacks=[xgb.callback.record_evaluation(eval_result=eval_results),],  # うまく働いていない様子?\n                             random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'XGB__learning_rate\': [0.1,], \n    \'XGB__max_depth\': [3, 5, 7,], \n    \'XGB__subsample\': [0.8, 0.9, 1.0], \n    \'XGB__colsample_bytree\': [0.7, 0.8, 0.9],\n}\nfit_params = {\n    "XGB__eval_set": [(X_train, y_train), (X_test, y_test)],\n    "XGB__eval_metric": ["rmse","mae"],\n    "XGB__verbose": 0,\n    "XGB__early_stopping_rounds": 10,\n}\n\ngs = GridSearchCV(estimator=pl_xgb,                           \n                  param_grid=param_grid,                           \n                  scoring="r2",                           \n                  cv=3,                        \n                  verbose=0,                          \n                 )\n\n#grid_search.fit(X_train, y_train, **fit_params)\n\nscores = cross_val_score(gs,\n                         X_train,\n                         y_train,\n                         scoring="r2",\n                         cv=5,\n                         fit_params=fit_params\n                        )\n')
+
+
+# In[133]:
+
+
+scores
+
+
+# In[134]:
+
+
+print(np.mean(scores), np.std(scores))
+
+
+# - ↑モデルを何にするかの基準に使える
+
 # In[ ]:
 
 
 
+
+
+# In[ ]:
+
+
+
+
+
+# - lightgbm
+
+# In[ ]:
+
+
+get_ipython().run_cell_magic('time', '', '\neval_results = {}\n\n# pipeline\npl_lgbm = Pipeline([\n    ("IMP", SimpleImputer(fill_value=-99999)),\n    ("LGBM", lgb.LGBMRegressor(\n                             objective="reg:squarederror",\n                             #eval_metric="rmse",\n                             n_estimators=1000,\n                             callbacks=[xgb.callback.record_evaluation(eval_result=eval_results),],  # うまく働いていない様子?\n                             #verbosity=0,  # silent\n                             #silent=True,\n                             random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'XGB__learning_rate\': [0.05, 0.1,], \n    \'XGB__max_depth\': [3, 5, 7, 9], \n    \'XGB__subsample\': [0.8, 0.9, 1.0], \n    \'XGB__colsample_bytree\': [0.7, 0.8, 0.9],\n}\nfit_params = {\n    "XGB__eval_set": [(X_train, y_train), (X_test, y_test)],\n    "XGB__eval_metric": ["rmse","mae"],\n    "XGB__verbose": 0,\n    "XGB__early_stopping_rounds": 20,\n}\n\ngrid_search = GridSearchCV(estimator=pl_xgb,\n                           param_grid=param_grid,\n                           scoring="r2",\n                           cv=3,\n                           verbose=0,\n                          )\n\ngrid_search.fit(X_train, y_train, **fit_params)')
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+lgb.LGBMRegressor
 
