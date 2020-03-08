@@ -309,19 +309,19 @@ len(df_evals2)
 
 # - parameter-tuning x cross-validation
 
-# In[132]:
+# In[146]:
 
 
-get_ipython().run_cell_magic('time', '', '\n\neval_results = {}\n\n# pipeline\npl_xgb = Pipeline([\n    ("XGB", xgb.XGBRegressor(objective="reg:squarederror",\n                             n_estimators=1000,\n                             callbacks=[xgb.callback.record_evaluation(eval_result=eval_results),],  # うまく働いていない様子?\n                             random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'XGB__learning_rate\': [0.1,], \n    \'XGB__max_depth\': [3, 5, 7,], \n    \'XGB__subsample\': [0.8, 0.9, 1.0], \n    \'XGB__colsample_bytree\': [0.7, 0.8, 0.9],\n}\nfit_params = {\n    "XGB__eval_set": [(X_train, y_train), (X_test, y_test)],\n    "XGB__eval_metric": ["rmse","mae"],\n    "XGB__verbose": 0,\n    "XGB__early_stopping_rounds": 10,\n}\n\ngs = GridSearchCV(estimator=pl_xgb,                           \n                  param_grid=param_grid,                           \n                  scoring="r2",                           \n                  cv=3,                        \n                  verbose=0,                          \n                 )\n\n#grid_search.fit(X_train, y_train, **fit_params)\n\nscores = cross_val_score(gs,\n                         X_train,\n                         y_train,\n                         scoring="r2",\n                         cv=5,\n                         fit_params=fit_params\n                        )\n')
+get_ipython().run_cell_magic('time', '', '\n\neval_results = {}\n\n# pipeline\npl_xgb = Pipeline([\n    ("XGB", xgb.XGBRegressor(objective="reg:squarederror",\n                             n_estimators=1000,\n                             n_jobs=4,\n                             #callbacks=[xgb.callback.record_evaluation(eval_result=eval_results),],  # うまく働いていない様子?\n                             random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'XGB__learning_rate\': [0.1,], \n    \'XGB__max_depth\': [3, 5, 7,], \n    \'XGB__subsample\': [0.8, 0.9, 1.0], \n    \'XGB__colsample_bytree\': [0.7, 0.8, 0.9],\n}\nfit_params = {\n    "XGB__eval_set": [(X_train, y_train),], #[(X_train, y_train), (X_test, y_test)],\n    #"XGB__eval_metric": ["rmse","mae"],\n    "XGB__verbose": 0,\n    "XGB__early_stopping_rounds": 10,\n}\n\ngs = GridSearchCV(estimator=pl_xgb,                           \n                  param_grid=param_grid,                           \n                  scoring="r2",                           \n                  cv=3,                        \n                  verbose=0,                          \n                 )\n\n#grid_search.fit(X_train, y_train, **fit_params)\n\nscores = cross_val_score(gs,\n                         X_train,\n                         y_train,\n                         scoring="r2",\n                         cv=5,\n                         fit_params=fit_params\n                        )\n')
 
 
-# In[133]:
+# In[147]:
 
 
 scores
 
 
-# In[134]:
+# In[148]:
 
 
 print(np.mean(scores), np.std(scores))
@@ -343,10 +343,97 @@ print(np.mean(scores), np.std(scores))
 
 # - lightgbm
 
+# In[155]:
+
+
+get_ipython().run_cell_magic('time', '', '\neval_results_lgb = {} # initialize\n\n# pipeline\npl_lgbm = Pipeline([\n    ("IMP", SimpleImputer(fill_value=-99999)),\n    ("LGBM", lgb.LGBMRegressor(objective="regression",      \n                               n_jobs=-1,\n                               n_estimators=1000,                             \n                               random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'LGBM__learning_rate\': [0.05, 0.1,], \n    \'LGBM__max_depth\': [3, 5, 7, 9],  # -1 で制限無し\n    \'LGBM__subsample\': [0.8, 0.9, 1.0],   # alias for bagging_fraction\n    \'LGBM__colsample_bytree\': [0.7, 0.8, 0.9],  # feature_fraction\n}\nfit_params = {\n    "LGBM__eval_set": [(X_train, y_train), (X_test, y_test)],\n    "LGBM__eval_metric": ["rmse","mae"],  # <= alias for ["l2", "l1"]\n    "LGBM__verbose": False,\n    "LGBM__early_stopping_rounds": 20,\n    "LGBM__callbacks": [lgb.record_evaluation(eval_results_lgb),],\n}\n\ngs_lgbm = GridSearchCV(estimator=pl_lgbm,                           \n                       param_grid=param_grid,                           \n                       scoring="r2",                           \n                       cv=5,                           \n                       verbose=0,                          \n                      )\n\ngs_lgbm.fit(X_train, y_train, **fit_params)')
+
+
+# In[156]:
+
+
+display(gs_lgbm.best_params_)
+display(gs_lgbm.best_score_)
+display(gs_lgbm.best_estimator_)
+
+
+# In[157]:
+
+
+r2_score(y_pred=gs_lgbm.predict(X_test), y_true=y_test)
+
+
+# In[175]:
+
+
+eval_results_lgb_best = gs_lgbm.best_estimator_.steps[1][1].evals_result_
+
+df_eval_lgbm = pd.DataFrame({
+    "train_rmse": eval_results_lgb_best["valid_0"]["rmse"],
+    "test_rmse": eval_results_lgb_best["valid_1"]["rmse"],
+    "train_l1": eval_results_lgb_best["valid_0"]["l1"],
+    "test_l1": eval_results_lgb_best["valid_1"]["l1"],
+    "train_l2": eval_results_lgb_best["valid_0"]["l2"],
+    "test_l2": eval_results_lgb_best["valid_1"]["l2"],
+})
+df_eval_lgbm[-5:]
+
+
+# In[168]:
+
+
+eval_results_lgb["valid_0"].keys()
+
+
+# In[176]:
+
+
+_, ax = plt.subplots(figsize=(12, 9))
+
+df_eval_lgbm[["train_rmse", "test_rmse"]].plot(ax=ax)
+plt.show()
+
+
+# In[177]:
+
+
+_, ax = plt.subplots(figsize=(12, 9))
+
+df_eval_lgbm[["train_l1", "test_l1"]].plot(ax=ax)
+plt.show()
+
+
+# In[178]:
+
+
+_, ax = plt.subplots(figsize=(12, 9))
+
+df_eval_lgbm[["train_l2", "test_l2"]].plot(ax=ax)
+plt.show()
+
+
 # In[ ]:
 
 
-get_ipython().run_cell_magic('time', '', '\neval_results = {}\n\n# pipeline\npl_lgbm = Pipeline([\n    ("IMP", SimpleImputer(fill_value=-99999)),\n    ("LGBM", lgb.LGBMRegressor(\n                             objective="reg:squarederror",\n                             #eval_metric="rmse",\n                             n_estimators=1000,\n                             callbacks=[xgb.callback.record_evaluation(eval_result=eval_results),],  # うまく働いていない様子?\n                             #verbosity=0,  # silent\n                             #silent=True,\n                             random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'XGB__learning_rate\': [0.05, 0.1,], \n    \'XGB__max_depth\': [3, 5, 7, 9], \n    \'XGB__subsample\': [0.8, 0.9, 1.0], \n    \'XGB__colsample_bytree\': [0.7, 0.8, 0.9],\n}\nfit_params = {\n    "XGB__eval_set": [(X_train, y_train), (X_test, y_test)],\n    "XGB__eval_metric": ["rmse","mae"],\n    "XGB__verbose": 0,\n    "XGB__early_stopping_rounds": 20,\n}\n\ngrid_search = GridSearchCV(estimator=pl_xgb,\n                           param_grid=param_grid,\n                           scoring="r2",\n                           cv=3,\n                           verbose=0,\n                          )\n\ngrid_search.fit(X_train, y_train, **fit_params)')
+
+
+
+# In[179]:
+
+
+get_ipython().run_cell_magic('time', '', '\n\n#eval_results = {}\n\n# pipeline\npl_lgbm_cv = Pipeline([\n    ("IMP", SimpleImputer(fill_value=-99999)),\n    ("LGBM", lgb.LGBMRegressor(objective="regression",      \n                               n_jobs=-1,\n                               n_estimators=1000,                             \n                               random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'LGBM__learning_rate\': [0.1,], \n    \'LGBM__max_depth\': [6, 7, 8],  # -1 で制限無し\n    \'LGBM__subsample\': [0.7, 0.8, 0.9],   # alias for bagging_fraction\n    \'LGBM__colsample_bytree\': [0.6, 0.7, 0.8],  # feature_fraction\n}\nfit_params = {\n    "LGBM__eval_set": [(X_train, y_train),], #[(X_train, y_train), (X_test, y_test)],\n    "LGBM__eval_metric": ["rmse",], #["rmse","mae"],  # <= alias for ["l2", "l1"]\n    "LGBM__verbose": False,\n    "LGBM__early_stopping_rounds": 20,\n    #"LGBM__callbacks": [lgb.record_evaluation(eval_results_lgb),],\n}\n\ngs_lgbm_cv = GridSearchCV(estimator=pl_lgbm_cv,                           \n                          param_grid=param_grid,                           \n                          scoring="r2",                           \n                          cv=3,                           \n                          verbose=0,                          \n                         )\n\n#grid_search.fit(X_train, y_train, **fit_params)\n\n\nscores = cross_val_score(gs_lgbm_cv,\n                         X_train,\n                         y_train,\n                         scoring="r2",\n                         cv=5,\n                         fit_params=fit_params\n                        )')
+
+
+# In[180]:
+
+
+scores
+
+
+# In[181]:
+
+
+print(np.mean(scores), np.std(scores))
 
 
 # In[ ]:
@@ -358,5 +445,48 @@ get_ipython().run_cell_magic('time', '', '\neval_results = {}\n\n# pipeline\npl_
 # In[ ]:
 
 
-lgb.LGBMRegressor
+
+
+
+# In[183]:
+
+
+get_ipython().run_cell_magic('time', '', '\n\n#eval_results = {}\n\n# pipeline\npl_lgbm_cv2 = Pipeline([\n    ("LGBM", lgb.LGBMRegressor(objective="regression",      \n                               n_jobs=-1,\n                               n_estimators=1000,                             \n                               random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'LGBM__learning_rate\': [0.1,], \n    \'LGBM__max_depth\': [6, 7, 8],  # -1 で制限無し\n    \'LGBM__subsample\': [0.7, 0.8, 0.9],   # alias for bagging_fraction\n    \'LGBM__colsample_bytree\': [0.6, 0.7, 0.8],  # feature_fraction\n}\nfit_params = {\n    "LGBM__eval_set": [(X_train, y_train),], #[(X_train, y_train), (X_test, y_test)],\n    "LGBM__eval_metric": ["rmse",], #["rmse","mae"],  # <= alias for ["l2", "l1"]\n    "LGBM__verbose": False,\n    "LGBM__early_stopping_rounds": 20,\n    #"LGBM__callbacks": [lgb.record_evaluation(eval_results_lgb),],\n}\n\ngs_lgbm_cv2 = GridSearchCV(estimator=pl_lgbm_cv2,                           \n                          param_grid=param_grid,                           \n                          scoring="r2",                           \n                          cv=2,                           \n                          verbose=0,                          \n                         )\n\n#grid_search.fit(X_train, y_train, **fit_params)\n\n\nscores2 = cross_val_score(gs_lgbm_cv2,\n                         X_train,\n                         y_train,\n                         scoring="r2",\n                         cv=5,\n                         fit_params=fit_params\n                        )')
+
+
+# In[184]:
+
+
+scores2
+
+
+# In[185]:
+
+
+print(np.mean(scores2), np.std(scores2))
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# - 以降の課題
+#     - validation_curve, learning_curveなどの確認
+#         - モデルの評価や解釈についての理解深化
+#     - `keras`(`tensorflow2`), `randomforest`, `SVR`などの実施と比較
+#     - `optuna`を使ったベイズ最適化を使った更なるチューニング方法の確認
+#     - スタッキングなどのアンサンブル
+
+# In[ ]:
+
+
+
 
