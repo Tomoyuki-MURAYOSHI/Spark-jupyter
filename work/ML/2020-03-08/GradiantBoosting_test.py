@@ -130,10 +130,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # - imputerを使うのはPipelineのテスト用で実質的な意味は無い
 
-# In[94]:
+# In[114]:
 
 
-get_ipython().run_cell_magic('time', '', '\neval_results = {}\n\n# pipeline\npl_xgb = Pipeline([\n    ("IMP", SimpleImputer(fill_value=-99999)),\n    ("XGB", xgb.XGBRegressor(early_stopping_rounds=10,\n                             objective="reg:squarederror",\n                             #eval_metric="rmse",\n                             n_estimators=1000,\n                             callbacks=[xgb.callback.record_evaluation(eval_result=eval_results),],  # うまく働いていない様子?\n                             verbosity=0,  # silent\n                             silent=True,\n                             random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'XGB__learning_rate\': [0.3,], \n    \'XGB__max_depth\': [6,], \n    \'XGB__subsample\': [0.8, 0.95], \n    \'XGB__colsample_bytree\': [0.5, 1.0],\n}\nfit_params = {\n    "XGB__eval_set": [(X_train, y_train), (X_test, y_test)],\n    "XGB__eval_metric": ["rmse","mae"],\n    "XGB__verbose": 0,\n    "XGB__early_stopping_rounds": 10,\n}\n\ngrid_search = GridSearchCV(estimator=pl_xgb,\n                           param_grid=param_grid,\n                           scoring="r2",\n                           cv=3,\n                           verbose=0,\n                          )\n\ngrid_search.fit(X_train, y_train, **fit_params)')
+get_ipython().run_cell_magic('time', '', '\neval_results = {}\n\n# pipeline\npl_xgb = Pipeline([\n    ("IMP", SimpleImputer(fill_value=-99999)),\n    ("XGB", xgb.XGBRegressor(#early_stopping_rounds=20,\n                             objective="reg:squarederror",\n                             #eval_metric="rmse",\n                             n_estimators=1000,\n                             callbacks=[xgb.callback.record_evaluation(eval_result=eval_results),],  # うまく働いていない様子?\n                             #verbosity=0,  # silent\n                             #silent=True,\n                             random_state=0))\n])\n\n# GridSearch用パラメータ（仮） 要ブラッシュアップ\nparam_grid = {  # 手法の確認が大事で、実際にサーチするのはとりあえず良いので適当に省く\n    \'XGB__learning_rate\': [0.05, 0.1,], \n    \'XGB__max_depth\': [3, 5, 7, 9], \n    \'XGB__subsample\': [0.8, 0.9, 1.0], \n    \'XGB__colsample_bytree\': [0.7, 0.8, 0.9],\n}\nfit_params = {\n    "XGB__eval_set": [(X_train, y_train), (X_test, y_test)],\n    "XGB__eval_metric": ["rmse","mae"],\n    "XGB__verbose": 0,\n    "XGB__early_stopping_rounds": 20,\n}\n\ngrid_search = GridSearchCV(estimator=pl_xgb,\n                           param_grid=param_grid,\n                           scoring="r2",\n                           cv=3,\n                           verbose=0,\n                          )\n\ngrid_search.fit(X_train, y_train, **fit_params)')
 
 
 # In[11]:
@@ -143,7 +143,7 @@ import sklearn
 sklearn.metrics.SCORERS.keys()
 
 
-# In[95]:
+# In[115]:
 
 
 display(grid_search.best_params_)
@@ -151,19 +151,19 @@ display(grid_search.best_score_)
 display(grid_search.best_estimator_)
 
 
-# In[96]:
+# In[116]:
 
 
 r2_score(y_pred=grid_search.predict(X_test), y_true=y_test)
 
 
-# In[97]:
+# In[117]:
 
 
 learning_data = grid_search.best_estimator_.steps[1][1].evals_result()
 
 
-# In[98]:
+# In[118]:
 
 
 df_learning = pd.DataFrame({
@@ -172,10 +172,10 @@ df_learning = pd.DataFrame({
     "train_mae": learning_data["validation_0"]["mae"],
     "test_mae": learning_data["validation_1"]["mae"]
 })
-display(df_learning)
+display(df_learning[-5:])
 
 
-# In[99]:
+# In[119]:
 
 
 _, ax = plt.subplots(figsize=(12, 9))
@@ -184,7 +184,7 @@ df_learning[["train_rmse", "test_rmse"]].plot(ax=ax)
 plt.show()
 
 
-# In[100]:
+# In[120]:
 
 
 _, ax = plt.subplots(figsize=(12, 9))
@@ -193,7 +193,7 @@ df_learning[["train_mae", "test_mae"]].plot(ax=ax)
 plt.show()
 
 
-# In[101]:
+# In[121]:
 
 
 feature_importtance = grid_search.best_estimator_.steps[1][1].feature_importances_
@@ -248,7 +248,7 @@ model_xgb.fit(
              )
 
 
-# In[86]:
+# In[102]:
 
 
 eval_result2 = model_xgb.evals_result()
@@ -259,7 +259,7 @@ df_evals2 = pd.DataFrame({
     "test_rmse": eval_result2["validation_1"]["rmse"],
     "test_mae": eval_result2["validation_1"]["mae"]
 })
-df_evals2
+df_evals2[-5:]
 
 
 # In[87]:
