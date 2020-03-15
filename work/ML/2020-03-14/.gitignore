@@ -1,0 +1,5 @@
+derby.log
+metastore_db
+*parquet
+*orc
+spark-warehouse
