@@ -3,7 +3,8 @@ version: '3'
 services:
   jupyternotebook:
     #image: jupyter-geo:2020-01-29 # tmp
-    image: spark-jupyter:2020-02-29  #
+    container_name: spark_jupyter
+    image: spark-jupyter:2020-03-26_2  #
     build: .
     user: root
     # URLに書いてある設定を読んで以下のenvironmentを書く。

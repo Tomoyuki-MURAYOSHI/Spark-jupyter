@@ -1,6 +1,6 @@
 #FROM jupyter/all-spark-notebook:latest
-#FROM jupyter/pyspark-notebook:ad3574d3c5c7
 FROM jupyter/all-spark-notebook:63d0df23b673
+#FROM jupyter/all-spark-notebook:dc9744740e12
 # change UID & GID
 
 #USER root
@@ -67,7 +67,9 @@ RUN conda update -y conda && \
         'selenium'\
         'geckodriver'\
         'firefox'\
+        'bokeh'\
         'holoviews'\
+        'geoviews'\
         'python-igraph'\
         'tensorflow=2.*'\
         'tensorflow-datasets'\
@@ -80,12 +82,15 @@ RUN conda update -y conda && \
         'imbalanced-learn'\
         'xgboost'\
         'lightgbm'\
+        'catboost'\
         'optuna'\
         'hyperopt'\
         'umap-learn'\
         'featuretools'\
         'django'\
+        'django-bootstrap4'\
         'flask'\
+        'flask-httpauth'\
         'sqlite'\
         'blaze'\
         'pyprind'\
