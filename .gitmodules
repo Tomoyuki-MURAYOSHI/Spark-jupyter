@@ -1,0 +1,6 @@
+[submodule "spark_jupyter_docker"]
+	path = spark_jupyter_docker
+	url = https://github.com/junkor-1011/spark_jupyter_docker.git
+[submodule "jupyter_pip_custom"]
+	path = jupyter_pip_custom
+	url = https://github.com/junkor-1011/jupyter_pip_custom.git
