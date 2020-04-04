@@ -4,8 +4,9 @@ services:
   jupyternotebook:
     #image: jupyter-geo:2020-01-29 # tmp
     container_name: spark_jupyter
-    image: spark-jupyter:2020-03-26_2  #
-    build: .
+    #image: spark-jupyter:2020-03-26_2  #
+    image: junkor1011/spark-jupyter-docker:version-0.0.3
+    #build: .
     user: root
     # URLに書いてある設定を読んで以下のenvironmentを書く。
     environment:
